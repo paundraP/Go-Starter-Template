@@ -32,8 +32,8 @@ qodana scan
 
 1. Clone this repository:
     ```shell
-    git clone https://github.com/LinguaKidAcademy/lingua-be.git
-    cd lingua-be
+    git clone https://github.com/paundraP/Go-Starter-Template.git
+    cd Go-Starter-Template
     ```
 2. Set the environment variables in a `.env` file:
     ```shell
