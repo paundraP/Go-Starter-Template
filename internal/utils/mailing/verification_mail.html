@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Your Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .header-image {
+            width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(226, 55, 55, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #6c41af;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #37384c;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+        a {
+            color: #6c41af;
+            text-decoration: none;
+        }
+        .button {
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            background-color: #2e74e5;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #1a5ab8;
+        }
+        .imageDesktop,
+        .imageMobile {
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .imageDesktop {
+                display: none;
+            }
+            .imageMobile {
+                display: block;
+                width: 100%;
+            }
+        }
+        @media (min-width: 769px) {
+            .imageDesktop {
+                display: block;
+                width: 100%;
+            }
+            .imageMobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img
+            src="https://ilits2025-dev.s3.ap-southeast-3.amazonaws.com/mailer/header-desktop.png"
+            class="header-image imageDesktop"
+            alt="Desktop header image"
+    />
+    <img
+            src="https://ilits2025-dev.s3.ap-southeast-3.amazonaws.com/mailer/header-mobile.png"
+            class="header-image imageMobile"
+            alt="Mobile header image"
+    />
+
+    <h1>Verifikasi Akunmu Dibawah Ini</h1>
+    <p>Halo, {{ .Email }}</p>
+    <!-- <p>To complete your registration and activate your account, please click the link below:</p> -->
+    <p>
+        Selangkah lagi menuju petualangan baru! Aktifkan akunmu sekarang untuk
+        memulai eksplorasi dalam mengenal potensi diri yang lebih dalam. Tekan
+        tombol di bawah ini dan bersiaplah untuk perjalanan yang penuh penemuan!
+    </p>
+    <div align="center">
+        <a href="{{ .Verify }}" class="button">Verifikasi Akunmu</a>
+    </div>
+    <!-- <p>If you are unable to click the link above, please copy and paste the following URL into your web browser:</p> -->
+    <p>
+        Jika tombol di atas tidak berfungsi, jangan khawatir! Kamu juga bisa
+        menyalin dan menempelkan tautan berikut ke web browser-mu.
+    </p>
+
+    <p>{{ .Verify }}</p>
+</div>
+</body>
+</html>

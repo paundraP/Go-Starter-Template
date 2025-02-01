@@ -1,0 +1,33 @@
+[
+  {
+    "id": "fbe516f6-3e39-11eb-b897-0862660ccbd4",
+    "name": "Paundra Pujo Darmawan",
+    "username": "Paundrapujo",
+    "email": "paundrapujodarmawan@gmail.com",
+    "password": "securePass",
+    "contact": "087816272338",
+    "role": "admin"
+  },
+  {
+    "id": "abc12345-3e39-11eb-b897-0862660ccbd4",
+    "name": "Jane Doe",
+    "username": "Doe",
+    "email": "janedoe@gmail.com",
+    "password": "anotherSecurePass",
+    "contact": "082117873228",
+    "role": "user",
+    "active_point": 0,
+    "level_point": 0
+  },
+  {
+    "id": "cd594635-a2cf-4306-9349-9c7201b9bd25",
+    "name": "Firda Silviani",
+    "username": "Firsil",
+    "email": "firsil@gmail.com",
+    "password": "mostSecurePass123",
+    "contact": "081234567890",
+    "role": "mentor",
+    "active_point": 0,
+    "level_point": 0
+  }
+]
