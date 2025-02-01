@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verify Your Account</title>
+    <title>Activate Your Account</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,23 +19,20 @@
             margin: 0 auto;
             padding: 20px;
             background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(226, 55, 55, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
         }
         h1 {
             color: #6c41af;
             font-size: 24px;
             margin-bottom: 20px;
+            text-align: center;
         }
         p {
             color: #37384c;
             font-size: 16px;
             line-height: 1.5;
             text-align: justify;
-        }
-        a {
-            color: #6c41af;
-            text-decoration: none;
         }
         .button {
             color: #ffffff !important;
@@ -44,7 +41,7 @@
             background-color: #2e74e5;
             border-radius: 5px;
             display: inline-block;
-            margin: 10px;
+            margin: 10px auto;
             transition: background-color 0.3s ease;
         }
         .button:hover {
@@ -60,13 +57,11 @@
             }
             .imageMobile {
                 display: block;
-                width: 100%;
             }
         }
         @media (min-width: 769px) {
             .imageDesktop {
                 display: block;
-                width: 100%;
             }
             .imageMobile {
                 display: none;
@@ -76,34 +71,20 @@
 </head>
 <body>
 <div class="container">
-    <img
-            src="https://ilits2025-dev.s3.ap-southeast-3.amazonaws.com/mailer/header-desktop.png"
-            class="header-image imageDesktop"
-            alt="Desktop header image"
-    />
-    <img
-            src="https://ilits2025-dev.s3.ap-southeast-3.amazonaws.com/mailer/header-mobile.png"
-            class="header-image imageMobile"
-            alt="Mobile header image"
-    />
+    <img src="img/header.png" class="header-image imageDesktop" alt="Desktop header image" />
+    <img src="img/header.png" class="header-image imageMobile" alt="Mobile header image" />
 
-    <h1>Verifikasi Akunmu Dibawah Ini</h1>
-    <p>Halo, {{ .Email }}</p>
-    <!-- <p>To complete your registration and activate your account, please click the link below:</p> -->
+    <h1>Activate Your Account</h1>
+    <p>Hello, {{ .Email }}</p>
     <p>
-        Selangkah lagi menuju petualangan baru! Aktifkan akunmu sekarang untuk
-        memulai eksplorasi dalam mengenal potensi diri yang lebih dalam. Tekan
-        tombol di bawah ini dan bersiaplah untuk perjalanan yang penuh penemuan!
+        You're just one step away from unlocking a world of opportunities! Click the button below to activate your account and start your journey.
     </p>
     <div align="center">
-        <a href="{{ .Verify }}" class="button">Verifikasi Akunmu</a>
+        <a href="{{ .Verify }}" class="button">Verify Your Account</a>
     </div>
-    <!-- <p>If you are unable to click the link above, please copy and paste the following URL into your web browser:</p> -->
     <p>
-        Jika tombol di atas tidak berfungsi, jangan khawatir! Kamu juga bisa
-        menyalin dan menempelkan tautan berikut ke web browser-mu.
+        If the button above doesn't work, you can copy and paste the following link into your web browser:
     </p>
-
     <p>{{ .Verify }}</p>
 </div>
 </body>
