@@ -39,7 +39,7 @@ qodana scan
     ```shell
     cp .env.example .env
     ```
-   And set the environment inside it. If you didn't install postgres yet, you can use docker to build the container.
+   And set the environment inside it. If you didn't install postgres yet or just lazy? xD.you can use docker to get the postgres image.
     ```bash
     docker-compose up -d
    ```
