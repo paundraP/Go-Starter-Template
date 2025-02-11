@@ -1,8 +1,7 @@
-package main
+package database
 
 import (
-	"Go-Starter-Template/database"
-	"Go-Starter-Template/database/seeder"
+	"Go-Starter-Template/cmd/database/seeder"
 	"flag"
 
 	"gorm.io/gorm"
@@ -10,7 +9,7 @@ import (
 
 func DatabaseSetUp() (*gorm.DB, error) {
 	// setting up database (migration and data)
-	db, err := database.NewDB()
+	db, err := NewDB()
 	if db == nil || err != nil {
 		return nil, err
 	}
@@ -21,7 +20,7 @@ func DatabaseSetUp() (*gorm.DB, error) {
 	flag.Parse()
 
 	if *migrate {
-		if err := database.Migrate(db); err != nil {
+		if err := Migrate(db); err != nil {
 			return nil, err
 		}
 	}
