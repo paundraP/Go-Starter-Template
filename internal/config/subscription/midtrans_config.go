@@ -3,10 +3,11 @@ package subscription
 import (
 	"Go-Starter-Template/pkg/entities"
 	"fmt"
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type Config struct {
@@ -33,7 +34,11 @@ func NewMidtransConfig() (*Config, error) {
 }
 
 func LogTransaction(transaction entities.Transaction) {
-	logFile, err := os.OpenFile("./logs/payments.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile(
+		"./logs/payments.log",
+		os.O_RDWR|os.O_CREATE|os.O_APPEND,
+		0666,
+	)
 	if err != nil {
 		log.Println("Failed to open log file:", err)
 		return
@@ -49,8 +54,13 @@ func LogTransaction(transaction entities.Transaction) {
 	logger := log.New(logFile, "", log.LstdFlags)
 
 	// Log the payment info
-	logger.Printf("✅ [PAID] Invoice: %s | UserID: %d | Status: %s | Time: %s",
-		transaction.Invoice, transaction.UserID, transaction.Status, time.Now().Format(time.RFC3339))
+	logger.Printf(
+		"✅ [PAID] Invoice: %s | UserID: %d | Status: %s | Time: %s",
+		transaction.Invoice,
+		transaction.UserID,
+		transaction.Status,
+		time.Now().Format(time.RFC3339),
+	)
 
 	fmt.Println("Log entry successfully written")
 }
