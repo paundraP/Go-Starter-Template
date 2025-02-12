@@ -1,5 +1,7 @@
 # Go Starter Template
 
+[![Mentioned in Awesome Fiber](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/gofiber/awesome-fiber)
+
 This is a REST API built with Golang and the Fiber framework. This repository also includes a payment gateway if your service requires one.
 
 ## Clean Architecture Principles
