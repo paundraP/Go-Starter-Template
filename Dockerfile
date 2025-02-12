@@ -3,23 +3,26 @@ FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
-# Copy only go.mod and go.sum first to leverage caching
+# Copy go.mod and go.sum first for better caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy all source files and build
+# Copy the entire project
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
 
-# Final Image (Minimal)
+# Build the main application
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/main ./cmd/main.go
+
+# Final Minimal Image
 FROM alpine:latest
 
 WORKDIR /root/
 
-# Copy binary from builder stage
-COPY --from=builder /docker-gs-ping .
+# Copy the built binary from the builder stage
+COPY --from=builder /app/main .
 
+# Expose the port your app runs on
 EXPOSE 8080
 
 # Run the binary
-CMD ["/root/docker-gs-ping"]
+CMD ["/root/main"]
