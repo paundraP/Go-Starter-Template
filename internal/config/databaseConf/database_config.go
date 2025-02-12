@@ -1,6 +1,13 @@
 package databaseconf
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+	"log"
+
+	"github.com/spf13/viper"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
 
 type Config struct {
 	DBName     string `mapstructure:"DB_NAME"`
@@ -25,4 +32,27 @@ func NewDBConfig() (*Config, error) {
 	}
 
 	return &config, nil
+}
+
+func ConnectDB() (*gorm.DB, error) {
+	dbConfig, err := NewDBConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
+		dbConfig.DBHost,
+		dbConfig.DBUser,
+		dbConfig.DBPassword,
+		dbConfig.DBName,
+		dbConfig.DBPort,
+	)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Database connection failed: %v", err)
+		return nil, err
+	}
+	return db, nil
 }

@@ -1,12 +1,13 @@
 package mailing
 
 import (
-	"Go-Starter-Template/internal/config/email"
+	emailconf "Go-Starter-Template/internal/config/emailConf"
+
 	"gopkg.in/gomail.v2"
 )
 
 func SendMail(toEmail string, subject string, body string) error {
-	emailConfig, err := email.NewEmailConfig()
+	emailConfig, err := emailconf.NewEmailConfig()
 	if err != nil {
 		return err
 	}

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"Go-Starter-Template/cmd/database"
 	"Go-Starter-Template/internal/config"
+	databaseconf "Go-Starter-Template/internal/config/databaseConf"
 )
 
 func main() {
-	db, err := database.DatabaseSetUp()
+	db, err := databaseconf.ConnectDB()
 	if err != nil {
 		panic(err)
 	}

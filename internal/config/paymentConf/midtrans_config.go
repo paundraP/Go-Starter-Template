@@ -1,4 +1,4 @@
-package subscription
+package paymentconf
 
 import (
 	"Go-Starter-Template/pkg/entities"

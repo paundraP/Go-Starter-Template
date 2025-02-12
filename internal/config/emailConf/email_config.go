@@ -1,4 +1,4 @@
-package email
+package emailconf
 
 import "github.com/spf13/viper"
 

@@ -1,7 +1,7 @@
 package midtrans
 
 import (
-	"Go-Starter-Template/internal/config/subscription"
+	paymentconf "Go-Starter-Template/internal/config/paymentConf"
 	"Go-Starter-Template/internal/utils/payment"
 	"Go-Starter-Template/pkg/entities"
 	"Go-Starter-Template/pkg/entities/domain"
@@ -10,17 +10,24 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"encoding/hex"
+	"math/big"
+	"os"
+
 	"github.com/google/uuid"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
-	"math/big"
-	"os"
 )
 
 type (
 	MidtransService interface {
-		CreateTransaction(req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error)
-		MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error)
+		CreateTransaction(
+			req domain.MidtransPaymentRequest,
+			userID string,
+		) (domain.MidtransInvoiceUrl, error)
+		MidtransWebHook(
+			ctx context.Context,
+			req domain.MidtransWebhookRequest,
+		) (domain.MidtransWebhookResponse, error)
 	}
 
 	midtransService struct {
@@ -29,14 +36,19 @@ type (
 	}
 )
 
-func NewMidtransService(midtransRepo MidtransRepository, userRepository user.UserRepository) MidtransService {
+func NewMidtransService(
+	midtransRepo MidtransRepository,
+	userRepository user.UserRepository,
+) MidtransService {
 	return &midtransService{
 		midtransRepository: midtransRepo,
 		userRepository:     userRepository,
 	}
 }
 
-func validateSignature(orderID, statusCode, grossAmount, receivedSignature string) bool {
+func validateSignature(
+	orderID, statusCode, grossAmount, receivedSignature string,
+) bool {
 	serverKey := os.Getenv("SERVER_KEY")
 	rawString := orderID + statusCode + grossAmount + serverKey
 
@@ -46,7 +58,10 @@ func validateSignature(orderID, statusCode, grossAmount, receivedSignature strin
 	return expectedSignature == receivedSignature
 }
 
-func (s *midtransService) CreateTransaction(req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error) {
+func (s *midtransService) CreateTransaction(
+	req domain.MidtransPaymentRequest,
+	userID string,
+) (domain.MidtransInvoiceUrl, error) {
 	client := payment.NewMidtransClient()
 	orderID := GenerateRandomString()
 	request := &snap.Request{
@@ -87,8 +102,16 @@ func (s *midtransService) CreateTransaction(req domain.MidtransPaymentRequest, u
 	}, nil
 }
 
-func (s *midtransService) MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error) {
-	if !validateSignature(req.OrderID, req.StatusCode, req.GrossAmount, req.SignatureKey) {
+func (s *midtransService) MidtransWebHook(
+	ctx context.Context,
+	req domain.MidtransWebhookRequest,
+) (domain.MidtransWebhookResponse, error) {
+	if !validateSignature(
+		req.OrderID,
+		req.StatusCode,
+		req.GrossAmount,
+		req.SignatureKey,
+	) {
 		return domain.MidtransWebhookResponse{}, domain.ErrInvalidSignature
 	}
 
@@ -104,13 +127,13 @@ func (s *midtransService) MidtransWebHook(ctx context.Context, req domain.Midtra
 	case "capture":
 		if fraudStatus == "accept" {
 			transaction.Status = "paid"
-			subscription.LogTransaction(transaction)
+			paymentconf.LogTransaction(transaction)
 		} else {
 			transaction.Status = "fraud"
 		}
 	case "settlement":
 		transaction.Status = "paid"
-		subscription.LogTransaction(transaction)
+		paymentconf.LogTransaction(transaction)
 	case "deny", "cancel", "expire":
 		transaction.Status = "failed"
 	case "pending":

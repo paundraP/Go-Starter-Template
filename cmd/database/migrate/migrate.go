@@ -1,10 +1,11 @@
-package database
+package migration
 
 import (
 	"Go-Starter-Template/pkg/entities"
 	"fmt"
-	"gorm.io/gorm"
 	"log"
+
+	"gorm.io/gorm"
 )
 
 func Migrate(db *gorm.DB) error {
