@@ -62,7 +62,7 @@ qodana scan
 
 - At the first, migrate and seed the database:
   ```bash
-  go run cmd/database/main.go
+  go run cmd/database/main.go -migrate -seed
   ```
 - Then you can run with **air** to automatically reload your application during development whenever you make changes to the source code (dont forget to install air first)
 
