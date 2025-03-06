@@ -3,7 +3,10 @@ package main
 import (
 	"Go-Starter-Template/internal/config"
 	databaseconf "Go-Starter-Template/internal/config/databaseConf"
+	"os"
 )
+
+var addr = os.Getenv("APP_PORT")
 
 func main() {
 	db, err := databaseconf.ConnectDB()
@@ -16,7 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	err = app.Listen(":3000")
+	err = app.Listen(addr)
 	if err != nil {
 		panic(err)
 	}

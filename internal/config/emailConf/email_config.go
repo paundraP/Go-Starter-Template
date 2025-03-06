@@ -17,8 +17,6 @@ func NewEmailConfig() (*Config, error) {
 		return nil, err
 	}
 
-	viper.AutomaticEnv()
-
 	var config Config
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, err

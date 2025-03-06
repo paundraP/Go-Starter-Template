@@ -7,11 +7,9 @@ import (
 	"Go-Starter-Template/internal/utils"
 	"Go-Starter-Template/pkg/midtrans"
 	"Go-Starter-Template/pkg/user"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"os"
 	"path/filepath"
@@ -24,12 +22,6 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	})
 	middlewares := middleware.NewMiddleware()
 	validator := utils.Validate
-
-	// load all env
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file")
-	}
 
 	// setting up logging and limiter
 	logDir := "logs"

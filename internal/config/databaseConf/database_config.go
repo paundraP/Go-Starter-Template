@@ -2,11 +2,10 @@ package databaseconf
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Config struct {
@@ -23,14 +22,11 @@ func NewDBConfig() (*Config, error) {
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
 	}
-
 	viper.AutomaticEnv()
-
 	var config Config
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, err
 	}
-
 	return &config, nil
 }
 
