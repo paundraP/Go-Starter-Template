@@ -2,11 +2,11 @@ package main
 
 import (
 	"Go-Starter-Template/internal/config"
-	databaseconf "Go-Starter-Template/internal/config/databaseConf"
+	databaseconf "Go-Starter-Template/internal/config/database_config"
 	"os"
 )
 
-var addr = os.Getenv("APP_PORT")
+var addr = os.Getenv("APP_URL")
 
 func main() {
 	db, err := databaseconf.ConnectDB()

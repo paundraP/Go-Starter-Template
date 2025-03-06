@@ -1,41 +1,36 @@
 package paymentconf
 
 import (
+	"Go-Starter-Template/internal/utils"
 	"Go-Starter-Template/pkg/entities"
 	"fmt"
 	"log"
 	"os"
 	"time"
-
-	"github.com/spf13/viper"
 )
 
-type Config struct {
-	ServerKey string `mapstructure:"SERVER_KEY"`
-	ClientKey string `mapstructure:"CLIENT_KEY"`
-	IsProd    bool   `mapstructure:"IS_PROD"`
+type MidtransConfig struct {
+	ClientKey string
+	ServerKey string
+	IsProd    bool
 }
 
-func NewMidtransConfig() (*Config, error) {
-	viper.SetConfigFile(".env")
+func LoadMidtransConfig() MidtransConfig {
+	isProd := os.Getenv("IS_PROD")
+	prodMode := isProd == "true"
 
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+	return MidtransConfig{
+		ClientKey: utils.GetEnv("CLIENT_KEY"),
+		ServerKey: utils.GetEnv("SERVER_KEY"),
+		IsProd:    prodMode,
 	}
-
-	var config Config
-	if err := viper.Unmarshal(&config); err != nil {
-		return nil, err
-	}
-
-	return &config, nil
 }
 
 func LogTransaction(transaction entities.Transaction) {
 	logFile, err := os.OpenFile(
 		"./logs/payments.log",
-		os.O_RDWR|os.O_CREATE|os.O_APPEND,
-		0666,
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+		0644,
 	)
 	if err != nil {
 		log.Println("Failed to open log file:", err)

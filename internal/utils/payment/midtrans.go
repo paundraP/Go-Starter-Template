@@ -1,19 +1,13 @@
 package payment
 
 import (
-	paymentconf "Go-Starter-Template/internal/config/paymentConf"
-	"fmt"
-
+	paymentconf "Go-Starter-Template/internal/config/payment_config"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
 )
 
 func NewMidtransClient() snap.Client {
-	midtransConfig, err := paymentconf.NewMidtransConfig()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(midtransConfig.ServerKey)
+	midtransConfig := paymentconf.LoadMidtransConfig()
 
 	var client snap.Client
 	client.New(midtransConfig.ServerKey, midtrans.Sandbox)

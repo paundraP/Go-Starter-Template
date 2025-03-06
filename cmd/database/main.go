@@ -3,7 +3,7 @@ package main
 import (
 	migration "Go-Starter-Template/cmd/database/migrate"
 	"Go-Starter-Template/cmd/database/seeder"
-	databaseconf "Go-Starter-Template/internal/config/databaseConf"
+	databaseconf "Go-Starter-Template/internal/config/database_config"
 	"flag"
 	"fmt"
 	"log"

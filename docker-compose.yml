@@ -1,40 +1,35 @@
-version: '3.5'
+version: '3.8'
 
 services:
-  postgres:
-    container_name: postgres_container
-    image: postgres
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fpswe
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DB_HOST: host.docker.internal
+
+      JWT_SECRET: ${JWT_SECRET}
+      AES_KEY: ${AES_KEY}
+
+      APP_URL: ${APP_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SENDER_NAME: ${SMTP_SENDER_NAME}
+      SMTP_AUTH_EMAIL: ${SMTP_AUTH_EMAIL}
+      SMTP_AUTH_PASSWORD: ${SMTP_AUTH_PASSWORD}
+
+      CLIENT_KEY: ${CLIENT_KEY}
+      SERVER_KEY: ${SERVER_KEY}
+      IS_PROD: ${IS_PROD}
+
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      AWS_S3_REGION: ${AWS_S3_REGION}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
     ports:
-      - "4321:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
-
-volumes:
-  postgres:
-  pgadmin:
+      - "8080:8080"

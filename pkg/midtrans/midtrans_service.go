@@ -1,7 +1,7 @@
 package midtrans
 
 import (
-	paymentconf "Go-Starter-Template/internal/config/paymentConf"
+	paymentconf "Go-Starter-Template/internal/config/payment_config"
 	"Go-Starter-Template/internal/utils/payment"
 	"Go-Starter-Template/pkg/entities"
 	"Go-Starter-Template/pkg/entities/domain"
