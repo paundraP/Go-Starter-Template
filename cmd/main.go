@@ -18,7 +18,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	if addr == "" {
+		addr = "0.0.0.0:8080"
+	}
 	err = app.Listen(addr)
 	if err != nil {
 		panic(err)

@@ -35,12 +35,6 @@ Clean Architecture is a software design philosophy that emphasizes the separatio
 - [Docker](https://www.docker.com/)
 - [Go 1.20 or higher](https://go.dev/dl/)
 
-`add on: In this project I use Qodana, Static code analysis by Qodana helps development teams to follow agreed quality standards and deliver readable, maintainable and secure code by JetBrains. If you want to test it on your code, just install Qodana and run it with:`
-
-```shell
-qodana scan
-```
-
 ## Setup
 
 1. Clone this repository:
@@ -80,8 +74,12 @@ qodana scan
     ```shell
     air -c .air.windows.conf
     ```
+- Use docker
+    ```shell
+    docker-compose up --build -d
+   ```
 
-The API should now be running on http://127.0.0.1:3000.
+The API should now be running on http://127.0.0.1:8080.
 
 ### Reference:
 
