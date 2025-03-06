@@ -36,7 +36,7 @@ func (c *Config) GuestRoute() {
 }
 
 func (c *Config) AuthRoute() {
-	restricted := c.App.Group("/api/r", c.Middleware.AuthMiddleware())
+	restricted := c.App.Group("/v1/api", c.Middleware.AuthMiddleware())
 
 	// user
 	restricted.Get("/users/me", c.UserHandler.Me)

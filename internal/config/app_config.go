@@ -42,7 +42,7 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		}
 	}
 
-	file, err := os.OpenFile(log_path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	file, err := os.OpenFile(log_path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
