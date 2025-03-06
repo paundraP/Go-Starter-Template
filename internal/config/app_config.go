@@ -8,20 +8,20 @@ import (
 	"Go-Starter-Template/pkg/midtrans"
 	"Go-Starter-Template/pkg/user"
 	"fmt"
-	"os"
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
+	"os"
+	"path/filepath"
 )
 
 func NewApp(db *gorm.DB) (*fiber.App, error) {
 	utils.InitValidator()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		EnablePrintRoutes: true,
+	})
 	middlewares := middleware.NewMiddleware()
 	validator := utils.Validate
 
@@ -32,25 +32,32 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	}
 
 	// setting up logging and limiter
-	file, err := os.OpenFile(
-		"./logs/app.log",
-		os.O_RDWR|os.O_CREATE|os.O_APPEND,
-		0666,
-	)
+	logDir := "logs"
+	logFile := "app.log"
+	log_path := filepath.Join(logDir, logFile)
+	if _, err := os.Stat(logDir); os.IsNotExist(err) {
+		err := os.MkdirAll(logDir, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	file, err := os.OpenFile(log_path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatalf("error closing file: %v", err)
+		}
+	}(file)
+
 	app.Use(logger.New(logger.Config{
 		TimeFormat: "2006-01-02 15:04:05",
 		TimeZone:   "Asia/Jakarta",
 		Output:     file,
 	}))
-
-	app.Use(limiter.New(limiter.Config{
-		Max:        10,
-		Expiration: 1 * time.Second,
-	}))
-
 	// Repository
 	userRepository := user.NewUserRepository(db)
 	midtransRepository := midtrans.NewMidtransRepository(db)

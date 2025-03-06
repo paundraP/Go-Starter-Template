@@ -20,7 +20,6 @@ var (
 	ErrEmailNotFound          = errors.New("email not found")
 	ErrUserNotFound           = errors.New("user not found")
 	ErrUserNotValid           = errors.New("user is not valid")
-	ErrGetRank                = errors.New("get rank failed")
 	CredentialInvalid         = errors.New("credential invalid")
 	ErrUserNotVerified        = errors.New("user not verified")
 	ErrRegisterUserFailed     = errors.New("register user failed")
@@ -71,9 +70,6 @@ type (
 		Email        string `json:"email"`
 		Contact      string `json:"contact"`
 		Subscription bool   `json:"subscription"`
-		ActivePoint  int    `json:"active_point"`
-		LevelPoint   int    `json:"level_point"`
-		Rank         string `json:"rank"`
 	}
 
 	UpdateUserRequest struct {

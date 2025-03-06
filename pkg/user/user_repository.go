@@ -13,7 +13,6 @@ type (
 		GetEmail(ctx context.Context, email string) (*entities.User, error)
 		UpdateUser(ctx context.Context, user entities.User) (*entities.User, error)
 		GetUserByID(ctx context.Context, id string) (*entities.User, error)
-		GetRankByTotalPoint(ctx context.Context, totalPoint int) (*entities.Rank, error)
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
 	}
 	userRepository struct {
@@ -56,14 +55,6 @@ func (r *userRepository) GetUserByID(ctx context.Context, id string) (*entities.
 		return nil, err
 	}
 	return &user, nil
-}
-
-func (r *userRepository) GetRankByTotalPoint(ctx context.Context, totalPoint int) (*entities.Rank, error) {
-	var rank entities.Rank
-	if err := r.db.WithContext(ctx).First(&rank, "lower_point <= ? AND upper_point >= ?", totalPoint, totalPoint).Error; err != nil {
-		return nil, err
-	}
-	return &rank, nil
 }
 
 func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID string) error {
