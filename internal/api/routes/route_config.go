@@ -21,7 +21,7 @@ func (c *Config) Setup() {
 
 func (c *Config) GuestRoute() {
 	c.App.Get("/api/ping", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "pong"})
+		return c.JSON(fiber.Map{"message": "pong, cicd works"})
 	})
 
 	// user routes
