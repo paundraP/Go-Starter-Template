@@ -28,19 +28,18 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
 
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            echo "Connected to VPS"
             docker pull ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
-
             docker stop fpswe || true
             docker rm fpswe || true
-
             cd /home/mintcocs/final-project-BE
-
             docker run -d --name fpswe \
               --env-file .env \
+              --restart always \
               -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
