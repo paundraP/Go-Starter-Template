@@ -9,6 +9,7 @@ services:
     depends_on:
       - db
     environment:
+      IS_DOCKER: "true"
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
