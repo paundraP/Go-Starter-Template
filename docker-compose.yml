@@ -36,6 +36,8 @@ services:
       AWS_SECRET_KEY: ${AWS_SECRET_KEY}
     ports:
       - "8080:8080"
+    networks:
+      - backend
   db:
     image: postgres:16
     restart: always
@@ -47,6 +49,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
 
 volumes:
   postgres_data:
