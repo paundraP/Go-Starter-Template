@@ -1,8 +1,8 @@
 package midtrans
 
 import (
-	paymentconf "Go-Starter-Template/internal/config/payment_config"
 	"Go-Starter-Template/internal/utils/payment"
+	paymentconf "Go-Starter-Template/internal/utils/payment"
 	"Go-Starter-Template/pkg/entities"
 	"Go-Starter-Template/pkg/entities/domain"
 	"Go-Starter-Template/pkg/user"
@@ -20,14 +20,8 @@ import (
 
 type (
 	MidtransService interface {
-		CreateTransaction(
-			req domain.MidtransPaymentRequest,
-			userID string,
-		) (domain.MidtransInvoiceUrl, error)
-		MidtransWebHook(
-			ctx context.Context,
-			req domain.MidtransWebhookRequest,
-		) (domain.MidtransWebhookResponse, error)
+		CreateTransaction(req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error)
+		MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error)
 	}
 
 	midtransService struct {
@@ -36,19 +30,14 @@ type (
 	}
 )
 
-func NewMidtransService(
-	midtransRepo MidtransRepository,
-	userRepository user.UserRepository,
-) MidtransService {
+func NewMidtransService(midtransRepo MidtransRepository, userRepository user.UserRepository) MidtransService {
 	return &midtransService{
 		midtransRepository: midtransRepo,
 		userRepository:     userRepository,
 	}
 }
 
-func validateSignature(
-	orderID, statusCode, grossAmount, receivedSignature string,
-) bool {
+func validateSignature(orderID, statusCode, grossAmount, receivedSignature string) bool {
 	serverKey := os.Getenv("SERVER_KEY")
 	rawString := orderID + statusCode + grossAmount + serverKey
 
@@ -58,10 +47,7 @@ func validateSignature(
 	return expectedSignature == receivedSignature
 }
 
-func (s *midtransService) CreateTransaction(
-	req domain.MidtransPaymentRequest,
-	userID string,
-) (domain.MidtransInvoiceUrl, error) {
+func (s *midtransService) CreateTransaction(req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error) {
 	client := payment.NewMidtransClient()
 	orderID := GenerateRandomString()
 	request := &snap.Request{
@@ -102,10 +88,7 @@ func (s *midtransService) CreateTransaction(
 	}, nil
 }
 
-func (s *midtransService) MidtransWebHook(
-	ctx context.Context,
-	req domain.MidtransWebhookRequest,
-) (domain.MidtransWebhookResponse, error) {
+func (s *midtransService) MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error) {
 	if !validateSignature(
 		req.OrderID,
 		req.StatusCode,

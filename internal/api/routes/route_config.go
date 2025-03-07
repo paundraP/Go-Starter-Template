@@ -39,10 +39,12 @@ func (c *Config) AuthRoute() {
 	restricted := c.App.Group("/v1/api", c.Middleware.AuthMiddleware())
 
 	// user
-	restricted.Get("/users/me", c.UserHandler.Me)
-	restricted.Patch("/users/update", c.UserHandler.UpdateUser)
+	{
+		restricted.Get("/users/me", c.UserHandler.Me)
+		restricted.Patch("/users/update", c.UserHandler.UpdateUser)
+		restricted.Post("/users/subscribe", c.MidtransHandler.CreateTransaction)
 
-	restricted.Post("/users/subscribe", c.MidtransHandler.CreateTransaction)
+	}
 
 	restricted.Get("/restricted", c.Middleware.OnlyAllow("admin"), func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Access granted"})
