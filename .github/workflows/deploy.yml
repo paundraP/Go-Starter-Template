@@ -35,6 +35,12 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
+
             docker stop fpswe || true
             docker rm fpswe || true
-            docker run -d --name fpswe -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
+
+            cd /home/mintcocs/final-project-BE
+
+            docker run -d --name fpswe \
+              --env-file /path/to/your/.env \
+              -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
