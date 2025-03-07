@@ -42,5 +42,5 @@ jobs:
             cd /home/mintcocs/final-project-BE
 
             docker run -d --name fpswe \
-              --env-file /path/to/your/.env \
+              --env-file .env \
               -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/fpswe:latest
