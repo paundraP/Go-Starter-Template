@@ -34,22 +34,17 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		}
 	}
 
-	file, err := os.OpenFile(log_path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(log_path, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatalf("error closing file: %v", err)
-		}
-	}(file)
 
 	app.Use(logger.New(logger.Config{
 		TimeFormat: "2006-01-02 15:04:05",
 		TimeZone:   "Asia/Jakarta",
 		Output:     file,
 	}))
+
 	// Repository
 	userRepository := user.NewUserRepository(db)
 	midtransRepository := midtrans.NewMidtransRepository(db)
