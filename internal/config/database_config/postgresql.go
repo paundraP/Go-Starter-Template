@@ -9,7 +9,6 @@ import (
 )
 
 func ConnectDB() (*gorm.DB, error) {
-	fmt.Printf("user: %s", utils.GetEnv("DB_USER"))
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
 		utils.GetEnv("DB_HOST"),

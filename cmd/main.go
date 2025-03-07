@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error config app: %v", err)
 	}
-	log.Println(addr)
+
 	if addr == "" {
 		addr = "0.0.0.0:8080"
 	}
