@@ -24,4 +24,4 @@ jobs:
             cd ${{ secrets.DIRECTORY }}
             git pull origin main
             docker compose down
-            docker compose up -d
+            docker compose up --build -d app
