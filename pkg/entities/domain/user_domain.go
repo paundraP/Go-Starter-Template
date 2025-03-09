@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"mime/multipart"
+)
 
 var (
 	MessageSuccessRegister             = "register success"
@@ -25,6 +28,29 @@ var (
 	ErrRegisterUserFailed     = errors.New("register user failed")
 	ErrTokenInvalid           = errors.New("token invalid")
 	ErrTokenExpired           = errors.New("token expired")
+	ErrUploadFile             = errors.New("upload file failed")
 )
 
-type ()
+type (
+	UserRegisterRequest struct {
+		Name           string                `json:"name" form:"name" validate:"required"`
+		Password       string                `json:"password" form:"password" validate:"required"`
+		Email          string                `json:"email" form:"email" validate:"required,email"`
+		About          string                `json:"about" form:"about" validate:"required"`
+		Address        string                `json:"address" form:"address" validate:"required"`
+		CurrentTitle   string                `json:"current_title" form:"current_title"`
+		ProfilePicture *multipart.FileHeader `json:"profile_picture" form:"profile_picture"`
+		Headline       *multipart.FileHeader `json:"headline" form:"headline"`
+	}
+
+	UserRegisterResponse struct {
+		Name           string `json:"name"`
+		Email          string `json:"email"`
+		About          string `json:"about"`
+		Address        string `json:"address"`
+		CurrentTitle   string `json:"current_title"`
+		ProfilePicture string `json:"profile_picture"`
+		Headline       string `json:"headline"`
+		IsPremium      bool   `json:"is_premium"`
+	}
+)

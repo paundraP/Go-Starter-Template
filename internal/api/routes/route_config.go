@@ -23,9 +23,10 @@ func (c *Config) GuestRoute() {
 	c.App.Get("/api/ping", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "pong, its works. please"})
 	})
-
+	user := c.App.Group("/api/user")
 	// user routes
 	{
+		user.Post("", c.UserHandler.RegisterUser)
 		c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
 	}
 }
