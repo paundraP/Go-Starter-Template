@@ -26,11 +26,6 @@ func (c *Config) GuestRoute() {
 
 	// user routes
 	{
-		c.App.Post("/api/users/register", c.UserHandler.Register)
-		c.App.Post("/api/users/login", c.UserHandler.Login)
-		c.App.Post("/api/users/send_verify", c.UserHandler.SendVerificationEmail)
-		c.App.Get("/api/users/verify", c.UserHandler.VerifyEmail)
-
 		c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
 	}
 }
@@ -40,8 +35,7 @@ func (c *Config) AuthRoute() {
 
 	// user
 	{
-		restricted.Get("/users/me", c.UserHandler.Me)
-		restricted.Patch("/users/update", c.UserHandler.UpdateUser)
+
 		restricted.Post("/users/subscribe", c.MidtransHandler.CreateTransaction)
 
 	}
