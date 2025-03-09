@@ -14,6 +14,7 @@ type (
 	UserService interface {
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
+		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
 	}
 
 	userService struct {
@@ -108,4 +109,50 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 		Token: token,
 		Role:  user.Role,
 	}, nil
+}
+
+func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error {
+	exist := s.userRepository.CheckUser(ctx, req.Email)
+	if !exist {
+		return domain.ErrUserNotFound
+	}
+	user, err := s.userRepository.GetUserByEmail(ctx, req.Email)
+	if err != nil {
+		return err
+	}
+	if req.Name != "" {
+		user.Name = req.Name
+	}
+	if req.Email != "" {
+		user.Email = req.NewEmail
+	}
+	if req.About != "" {
+		user.About = req.About
+	}
+	if req.Address != "" {
+		user.Address = req.Address
+	}
+	if req.CurrentTitle != "" {
+		user.CurrentTitle = req.CurrentTitle
+	}
+	allowedMimetype := []string{"image/jpeg", "image/png"}
+	if req.ProfilePicture != nil {
+
+		_, err := s.awsS3.UploadFile(user.ProfilePicture, req.ProfilePicture, "profile-picture", allowedMimetype...)
+		if err != nil {
+			return domain.ErrUploadFile
+		}
+
+	}
+
+	if req.Headline != nil {
+		_, err := s.awsS3.UploadFile(user.Headline, req.Headline, "headline", allowedMimetype...)
+		if err != nil {
+			return domain.ErrUploadFile
+		}
+	}
+	if err := s.userRepository.UpdateProfile(ctx, user); err != nil {
+		return err
+	}
+	return nil
 }

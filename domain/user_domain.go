@@ -65,4 +65,15 @@ type (
 		Token string `json:"token"`
 		Role  string `json:"role"`
 	}
+
+	UpdateUserRequest struct {
+		Name           string                `json:"name" form:"name"`
+		Email          string                `json:"email" form:"email" validate:"required,email"`
+		NewEmail       string                `json:"new_email" form:"new_email" validate:"email"`
+		About          string                `json:"about" form:"about"`
+		Address        string                `json:"address" form:"address"`
+		CurrentTitle   string                `json:"current_title" form:"current_title"`
+		ProfilePicture *multipart.FileHeader `json:"profile_picture" form:"profile_picture"`
+		Headline       *multipart.FileHeader `json:"headline" form:"headline"`
+	}
 )
