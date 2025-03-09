@@ -15,6 +15,7 @@ var (
 
 	MessageFailedBodyRequest = "body request failed"
 	MessageFailedRegister    = "register failed"
+	MessageFailedLogin       = "login failed"
 	MessageFailedGetDetail   = "failed get detail"
 	MessageFailedUpdateUser  = "failed update user"
 
@@ -52,5 +53,16 @@ type (
 		ProfilePicture string `json:"profile_picture"`
 		Headline       string `json:"headline"`
 		IsPremium      bool   `json:"is_premium"`
+	}
+
+	UserLoginRequest struct {
+		Email    string `json:"email" validate:"required,email"`
+		Password string `json:"password" validate:"required"`
+	}
+
+	UserLoginResponse struct {
+		Email string `json:"email"`
+		Token string `json:"token"`
+		Role  string `json:"role"`
 	}
 )

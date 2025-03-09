@@ -13,6 +13,7 @@ import (
 type (
 	UserService interface {
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
+		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
 	}
 
 	userService struct {
@@ -69,6 +70,7 @@ func (s *userService) RegisterUser(ctx context.Context, req domain.UserRegisterR
 		ProfilePicture: profilePicture,
 		Headline:       headline,
 		IsPremium:      false,
+		Role:           domain.RoleUser,
 	}
 
 	create, err := s.userRepository.RegisterUser(ctx, user)
@@ -84,5 +86,26 @@ func (s *userService) RegisterUser(ctx context.Context, req domain.UserRegisterR
 		ProfilePicture: create.ProfilePicture,
 		Headline:       create.Headline,
 		IsPremium:      create.IsPremium,
+	}, nil
+}
+
+func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error) {
+	user, err := s.userRepository.GetUserByEmail(ctx, req.Email)
+	if err != nil {
+		return domain.UserLoginResponse{}, domain.ErrUserNotFound
+	}
+	if ok := utils.CheckPassword(req.Password, user.Password); !ok {
+		return domain.UserLoginResponse{}, domain.CredentialInvalid
+	}
+
+	token, err := utils.GenerateToken(user.ID, user.Role)
+	if err != nil {
+		return domain.UserLoginResponse{}, err
+	}
+
+	return domain.UserLoginResponse{
+		Email: user.Email,
+		Token: token,
+		Role:  user.Role,
 	}, nil
 }

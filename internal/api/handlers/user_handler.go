@@ -11,6 +11,7 @@ import (
 type (
 	UserHandler interface {
 		RegisterUser(c *fiber.Ctx) error
+		Login(c *fiber.Ctx) error
 	}
 	userHandler struct {
 		UserService user.UserService
@@ -43,4 +44,19 @@ func (h *userHandler) RegisterUser(c *fiber.Ctx) error {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedRegister, err)
 	}
 	return presenters.SuccessResponse(c, res, fiber.StatusCreated, domain.MessageSuccessRegister)
+}
+
+func (h *userHandler) Login(c *fiber.Ctx) error {
+	req := new(domain.UserLoginRequest)
+	if err := c.BodyParser(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+	if err := h.Validator.Struct(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedRegister, err)
+	}
+	res, err := h.UserService.Login(c.Context(), *req)
+	if err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedLogin, err)
+	}
+	return presenters.SuccessResponse(c, res, fiber.StatusOK, domain.MessageSuccessLogin)
 }
