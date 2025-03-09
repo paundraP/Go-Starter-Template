@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"mime/multipart"
+)
 
 var (
 	MessageSuccessRegister             = "register success"
@@ -25,61 +28,29 @@ var (
 	ErrRegisterUserFailed     = errors.New("register user failed")
 	ErrTokenInvalid           = errors.New("token invalid")
 	ErrTokenExpired           = errors.New("token expired")
+	ErrUploadFile             = errors.New("upload file failed")
 )
 
 type (
 	UserRegisterRequest struct {
-		Name     string `json:"name" validate:"required"`
-		Username string `json:"username" validate:"required,min=3"`
-		Email    string `json:"email" validate:"required,email"`
-		Password string `json:"password" validate:"required,min=8"`
-		Contact  string `json:"contact" validate:"required"`
+		Name           string                `json:"name" form:"name" validate:"required"`
+		Password       string                `json:"password" form:"password" validate:"required"`
+		Email          string                `json:"email" form:"email" validate:"required,email"`
+		About          string                `json:"about" form:"about" validate:"required"`
+		Address        string                `json:"address" form:"address" validate:"required"`
+		CurrentTitle   string                `json:"current_title" form:"current_title"`
+		ProfilePicture *multipart.FileHeader `json:"profile_picture" form:"profile_picture"`
+		Headline       *multipart.FileHeader `json:"headline" form:"headline"`
 	}
 
 	UserRegisterResponse struct {
-		Email    string `json:"email"`
-		Username string `json:"username"`
-	}
-
-	UserLoginRequest struct {
-		Email    string `json:"email" validate:"required,email"`
-		Password string `json:"password" validate:"required,min=8"`
-	}
-
-	UserLoginResponse struct {
-		Token string `json:"token"`
-		Role  string `json:"role"`
-	}
-
-	SendVerifyEmailRequest struct {
-		Email string `json:"email" validate:"required,email"`
-	}
-
-	VerifyEmailRequest struct {
-		Token string `json:"token" form:"token" validate:"required"`
-	}
-
-	VerifyEmailResponse struct {
-		Email      string `json:"email"`
-		IsVerified bool   `json:"is_verified"`
-	}
-
-	DetailUserResponse struct {
-		Name         string `json:"name"`
-		Username     string `json:"username"`
-		Email        string `json:"email"`
-		Contact      string `json:"contact"`
-		Subscription bool   `json:"subscription"`
-	}
-
-	UpdateUserRequest struct {
-		Name     string `json:"name" validate:"omitempty"`
-		Username string `json:"username" validate:"omitempty,min=3"`
-		Email    string `json:"email" validate:"omitempty,email"`
-		Contact  string `json:"contact" validate:"omitempty"`
-	}
-
-	UpdateUserResponse struct {
-		Email string `json:"email"`
+		Name           string `json:"name"`
+		Email          string `json:"email"`
+		About          string `json:"about"`
+		Address        string `json:"address"`
+		CurrentTitle   string `json:"current_title"`
+		ProfilePicture string `json:"profile_picture"`
+		Headline       string `json:"headline"`
+		IsPremium      bool   `json:"is_premium"`
 	}
 )

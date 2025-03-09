@@ -2,8 +2,8 @@ package main
 
 import (
 	migration "Go-Starter-Template/cmd/database/migrate"
-	"Go-Starter-Template/cmd/database/seeder"
 	databaseconf "Go-Starter-Template/internal/config/database_config"
+	"Go-Starter-Template/internal/utils"
 	"flag"
 	"fmt"
 	"log"
@@ -12,6 +12,7 @@ import (
 )
 
 func DatabaseSetUp() (*gorm.DB, error) {
+	utils.LoadEnv()
 	fmt.Println("Hi!")
 	// setting up database (migration and data)
 	db, err := databaseconf.ConnectDB()
@@ -20,7 +21,6 @@ func DatabaseSetUp() (*gorm.DB, error) {
 	}
 
 	migrateFlag := flag.Bool("migrate", false, "migrating the database")
-	seedFlag := flag.Bool("seed", false, "seeding the database")
 
 	flag.Parse()
 
@@ -29,18 +29,12 @@ func DatabaseSetUp() (*gorm.DB, error) {
 			return nil, err
 		}
 	}
-	if *seedFlag {
-		if err := seeder.Seed(db); err != nil {
-			return nil, err
-		}
-	}
 	return db, nil
 }
 
 func main() {
-	db, err := DatabaseSetUp()
+	_, err := DatabaseSetUp()
 	if err != nil {
 		log.Fatalf("Error setting up database : %v", err)
 	}
-	fmt.Println("Database setup successful:", db)
 }

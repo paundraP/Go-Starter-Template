@@ -3,16 +3,14 @@ package user
 import (
 	"Go-Starter-Template/pkg/entities"
 	"context"
-	"errors"
 	"gorm.io/gorm"
 )
 
 type (
 	UserRepository interface {
-		CreateUser(ctx context.Context, user *entities.User) error
-		GetEmail(ctx context.Context, email string) (*entities.User, error)
-		UpdateUser(ctx context.Context, user entities.User) (*entities.User, error)
-		GetUserByID(ctx context.Context, id string) (*entities.User, error)
+		RegisterUser(ctx context.Context, req entities.User) (entities.User, error)
+		CheckUser(ctx context.Context, email string) bool
+		GetUserByEmail(ctx context.Context, email string) (entities.User, error)
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
 	}
 	userRepository struct {
@@ -24,37 +22,30 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) CreateUser(ctx context.Context, user *entities.User) error {
-
-	if err := r.db.WithContext(ctx).Create(&user).Error; err != nil {
-		return err
+func (r *userRepository) RegisterUser(ctx context.Context, req entities.User) (entities.User, error) {
+	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
+		return entities.User{}, err
 	}
-	return nil
+	return req, nil
 }
 
-func (r *userRepository) GetEmail(ctx context.Context, email string) (*entities.User, error) {
+func (r *userRepository) CheckUser(ctx context.Context, email string) bool {
+	var user entities.User
+	if err := r.db.WithContext(ctx).First(user, "email = ?", email).Error; err != nil {
+		return false
+	}
+	if user.Email != email {
+		return false
+	}
+	return true
+}
+
+func (r *userRepository) GetUserByEmail(ctx context.Context, email string) (entities.User, error) {
 	var user entities.User
 	if err := r.db.WithContext(ctx).First(&user, "email = ?", email).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, err
+		return entities.User{}, err
 	}
-	return &user, nil
-}
-
-func (r *userRepository) UpdateUser(ctx context.Context, user entities.User) (*entities.User, error) {
-	if err := r.db.WithContext(ctx).Updates(&user).Error; err != nil {
-		return nil, err
-	}
-	return &user, nil
-}
-func (r *userRepository) GetUserByID(ctx context.Context, id string) (*entities.User, error) {
-	var user entities.User
-	if err := r.db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
-		return nil, err
-	}
-	return &user, nil
+	return user, nil
 }
 
 func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID string) error {
