@@ -19,29 +19,23 @@ func (c *Config) Setup() {
 	c.AuthRoute()
 }
 
+func (c *Config) User() {
+	user := c.App.Group("/api/user")
+	{
+		user.Post("", c.UserHandler.RegisterUser)
+		user.Post("/subscribe", c.Middleware.AuthMiddleware(), c.MidtransHandler.CreateTransaction)
+	}
+}
+
 func (c *Config) GuestRoute() {
 	c.App.Get("/api/ping", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "pong, its works. please"})
 	})
-	user := c.App.Group("/api/user")
-	// user routes
-	{
-		user.Post("", c.UserHandler.RegisterUser)
-		c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
-	}
+	c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
 }
 
 func (c *Config) AuthRoute() {
-	restricted := c.App.Group("/v1/api", c.Middleware.AuthMiddleware())
-
-	// user
-	{
-
-		restricted.Post("/users/subscribe", c.MidtransHandler.CreateTransaction)
-
-	}
-
-	restricted.Get("/restricted", c.Middleware.OnlyAllow("admin"), func(c *fiber.Ctx) error {
+	c.App.Get("/restricted", c.Middleware.OnlyAllow("admin"), func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Access granted"})
 	})
 }
