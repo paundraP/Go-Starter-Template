@@ -64,6 +64,8 @@ func (s *userService) RegisterUser(ctx context.Context, req domain.UserRegisterR
 		Password:       password,
 		Email:          req.Email,
 		About:          req.About,
+		Address:        req.Address,
+		CurrentTitle:   req.CurrentTitle,
 		ProfilePicture: profilePicture,
 		Headline:       headline,
 		IsPremium:      false,

@@ -31,6 +31,9 @@ func (h *userHandler) RegisterUser(c *fiber.Ctx) error {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
 	}
 
+	req.ProfilePicture, _ = c.FormFile("profile_picture")
+	req.Headline, _ = c.FormFile("headline")
+
 	if err := h.Validator.Struct(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedRegister, err)
 	}
