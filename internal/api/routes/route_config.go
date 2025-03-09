@@ -23,7 +23,8 @@ func (c *Config) Setup() {
 func (c *Config) User() {
 	user := c.App.Group("/api/user")
 	{
-		user.Post("", c.UserHandler.RegisterUser)
+		user.Post("/register", c.UserHandler.RegisterUser)
+		user.Post("/login", c.UserHandler.Login)
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(), c.MidtransHandler.CreateTransaction)
 	}
 }
@@ -36,7 +37,7 @@ func (c *Config) GuestRoute() {
 }
 
 func (c *Config) AuthRoute() {
-	c.App.Get("/restricted", c.Middleware.OnlyAllow("admin"), func(c *fiber.Ctx) error {
+	c.App.Get("/restricted", c.Middleware.AuthMiddleware(), func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Access granted"})
 	})
 }
