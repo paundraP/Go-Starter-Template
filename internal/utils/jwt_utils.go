@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"Go-Starter-Template/pkg/entities/domain"
+	"Go-Starter-Template/domain"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"time"

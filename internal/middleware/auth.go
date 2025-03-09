@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"Go-Starter-Template/pkg/entities/domain"
+	"Go-Starter-Template/domain"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"

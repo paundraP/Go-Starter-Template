@@ -12,7 +12,7 @@ Clean Architecture is a software design philosophy that emphasizes the separatio
 
 1. **Entities (Core Business Logic)**
 
-- Located in the pkg/entities directory.
+- Located in the entities directory.
 - Contains the core business logic and domain models, which are independent of any external frameworks or technologies.
 
 2. **Use Cases (Application Logic)**

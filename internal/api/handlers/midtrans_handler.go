@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"Go-Starter-Template/domain"
 	"Go-Starter-Template/internal/api/presenters"
-	"Go-Starter-Template/pkg/entities/domain"
 	"Go-Starter-Template/pkg/midtrans"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
