@@ -25,10 +25,11 @@ func (c *Config) User() {
 	{
 		user.Post("/register", c.UserHandler.RegisterUser)
 		user.Post("/login", c.UserHandler.Login)
-		user.Post("/update", c.Middleware.AuthMiddleware(), c.UserHandler.UpdateProfile)
+		user.Post("/update-profile", c.Middleware.AuthMiddleware(), c.UserHandler.UpdateProfile)
+		user.Post("/update-education", c.Middleware.AuthMiddleware(), c.UserHandler.UpdateEducation)
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(), c.MidtransHandler.CreateTransaction)
 	}
-}``
+}
 
 func (c *Config) GuestRoute() {
 	c.App.Get("/api/ping", func(c *fiber.Ctx) error {

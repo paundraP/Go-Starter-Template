@@ -15,6 +15,7 @@ type (
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
 		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
+		UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error
 	}
 
 	userService struct {
@@ -30,7 +31,7 @@ func NewUserService(userRepository UserRepository, awsS3 storage.AwsS3) UserServ
 var VerifyEmailRoute = "api/verify_email/user"
 
 func (s *userService) RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error) {
-	isRegister := s.userRepository.CheckUser(ctx, req.Email)
+	isRegister := s.userRepository.CheckUserByEmail(ctx, req.Email)
 	if isRegister {
 		return domain.UserRegisterResponse{}, domain.ErrEmailAlreadyExists
 	}
@@ -112,7 +113,7 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 }
 
 func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error {
-	exist := s.userRepository.CheckUser(ctx, req.Email)
+	exist := s.userRepository.CheckUserByEmail(ctx, req.Email)
 	if !exist {
 		return domain.ErrUserNotFound
 	}
@@ -153,6 +154,29 @@ func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRe
 	}
 	if err := s.userRepository.UpdateProfile(ctx, user); err != nil {
 		return err
+	}
+	return nil
+}
+
+func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error {
+	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+		return domain.ErrUserNotFound
+	}
+	userid, err := uuid.Parse(userID)
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+	education := entities.UserEducation{
+		ID:           uuid.New(),
+		UserID:       userid,
+		SchoolName:   req.SchoolName,
+		Degree:       req.Degree,
+		FieldOfStudy: req.FieldOfStudy,
+		Description:  req.Description,
+	}
+
+	if err := s.userRepository.UpdateEducation(ctx, education); err != nil {
+		return domain.ErrUpdateEducation
 	}
 	return nil
 }
