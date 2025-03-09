@@ -15,5 +15,6 @@ type User struct {
 	ProfilePicture string    `json:"profile_picture"`
 	Headline       string    `json:"headline"`
 	IsPremium      bool      `json:"is_premium"`
+	Role           string    `json:"role"`
 	Timestamp
 }
