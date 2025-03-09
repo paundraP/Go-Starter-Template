@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Go-Starter-Template/internal/config"
-	databaseconf "Go-Starter-Template/internal/config/database_config"
+	"Go-Starter-Template/cmd/config"
+	"Go-Starter-Template/cmd/config/database_config"
 	"Go-Starter-Template/internal/utils"
 	"log"
 

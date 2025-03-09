@@ -7,6 +7,7 @@ type JobApplication struct {
 	UserID uuid.UUID `json:"user_id"`
 	JobID  uuid.UUID `json:"job_id"`
 	CV     string    `json:"cv"`
+	Status string    `json:"status"`
 
 	User *User `gorm:"foreignKey:UserID"`
 	Job  *Job  `gorm:"foreignKey:JobID"`

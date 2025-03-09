@@ -1,8 +1,8 @@
 package main
 
 import (
+	"Go-Starter-Template/cmd/config/database_config"
 	migration "Go-Starter-Template/cmd/database/migrate"
-	databaseconf "Go-Starter-Template/internal/config/database_config"
 	"Go-Starter-Template/internal/utils"
 	"flag"
 	"fmt"
