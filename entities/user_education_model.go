@@ -8,6 +8,7 @@ type UserEducation struct {
 	SchoolName   string    `json:"school_name"`
 	Degree       string    `json:"degree"`
 	FieldOfStudy string    `json:"field_of_study"`
+	Description  string    `json:"description"`
 
 	User *User `gorm:"foreignKey:UserID"`
 	Timestamp
