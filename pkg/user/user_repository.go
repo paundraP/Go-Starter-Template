@@ -1,7 +1,7 @@
 package user
 
 import (
-	"Go-Starter-Template/pkg/entities"
+	"Go-Starter-Template/entities"
 	"context"
 	"gorm.io/gorm"
 )

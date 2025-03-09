@@ -1,10 +1,10 @@
 package user
 
 import (
+	"Go-Starter-Template/domain"
+	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
 	"Go-Starter-Template/internal/utils/storage"
-	"Go-Starter-Template/pkg/entities"
-	"Go-Starter-Template/pkg/entities/domain"
 	"context"
 	"fmt"
 	"github.com/google/uuid"

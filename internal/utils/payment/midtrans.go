@@ -1,8 +1,8 @@
 package payment
 
 import (
+	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
-	"Go-Starter-Template/pkg/entities"
 	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
