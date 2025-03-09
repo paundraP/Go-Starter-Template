@@ -15,6 +15,7 @@ type Config struct {
 
 func (c *Config) Setup() {
 	c.App.Use(c.Middleware.CORSMiddleware())
+	c.User()
 	c.GuestRoute()
 	c.AuthRoute()
 }

@@ -11,6 +11,7 @@ type (
 		RegisterUser(ctx context.Context, req entities.User) (entities.User, error)
 		CheckUser(ctx context.Context, email string) bool
 		GetUserByEmail(ctx context.Context, email string) (entities.User, error)
+		UpdateSubscriptionStatus(ctx context.Context, userID string) error
 	}
 	userRepository struct {
 		db *gorm.DB
@@ -45,4 +46,14 @@ func (r *userRepository) GetUserByEmail(ctx context.Context, email string) (enti
 		return entities.User{}, err
 	}
 	return user, nil
+}
+
+func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID string) error {
+	if err := r.db.WithContext(ctx).
+		Model(&entities.User{}).
+		Where("id = ?", userID).
+		Updates(map[string]interface{}{"subscribe": true}).Error; err != nil {
+		return err
+	}
+	return nil
 }
