@@ -6,6 +6,7 @@ import (
 	"Go-Starter-Template/internal/middleware"
 	"Go-Starter-Template/internal/utils"
 	"Go-Starter-Template/internal/utils/storage"
+	"Go-Starter-Template/pkg/jwt"
 	"Go-Starter-Template/pkg/midtrans"
 	"Go-Starter-Template/pkg/user"
 	"github.com/gofiber/fiber/v2"
@@ -22,6 +23,7 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		EnablePrintRoutes: true,
 	})
 	middlewares := middleware.NewMiddleware()
+	jwtService := jwt.NewJWTService()
 	validator := utils.Validate
 
 	// setting up logging and limiter
@@ -54,7 +56,7 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	midtransRepository := midtrans.NewMidtransRepository(db)
 
 	// Service
-	userService := user.NewUserService(userRepository, awsS3)
+	userService := user.NewUserService(userRepository, awsS3, jwtService)
 	midtransService := midtrans.NewMidtransService(
 		midtransRepository,
 		userRepository,
@@ -70,6 +72,7 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		UserHandler:     userHandler,
 		MidtransHandler: midtransHandler,
 		Middleware:      middlewares,
+		JwtService:      jwtService,
 	}
 	routesConfig.Setup()
 	return app, nil

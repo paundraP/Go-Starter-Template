@@ -3,6 +3,7 @@ package routes
 import (
 	"Go-Starter-Template/internal/api/handlers"
 	"Go-Starter-Template/internal/middleware"
+	jwtService "Go-Starter-Template/pkg/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -11,6 +12,7 @@ type Config struct {
 	UserHandler     handlers.UserHandler
 	MidtransHandler handlers.MidtransHandler
 	Middleware      middleware.Middleware
+	JwtService      jwtService.JWTService
 }
 
 func (c *Config) Setup() {
@@ -25,7 +27,9 @@ func (c *Config) User() {
 	{
 		user.Post("/register", c.UserHandler.RegisterUser)
 		user.Post("/login", c.UserHandler.Login)
-		user.Post("/subscribe", c.Middleware.AuthMiddleware(), c.MidtransHandler.CreateTransaction)
+		user.Post("/update-profile", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateProfile)
+		user.Post("/update-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateEducation)
+		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JwtService), c.MidtransHandler.CreateTransaction)
 	}
 }
 
@@ -37,7 +41,16 @@ func (c *Config) GuestRoute() {
 }
 
 func (c *Config) AuthRoute() {
-	c.App.Get("/restricted", c.Middleware.AuthMiddleware(), func(c *fiber.Ctx) error {
+	c.App.Get("/restricted", c.Middleware.AuthMiddleware(c.JwtService), func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Access granted"})
+	})
+	c.App.Get("/me", c.Middleware.AuthMiddleware(c.JwtService), func(c *fiber.Ctx) error {
+		userID := c.Locals("user_id")
+		role := c.Locals("role")
+		return c.JSON(fiber.Map{
+			"message": "Welcome to your dashboard",
+			"user_id": userID,
+			"role":    role,
+		})
 	})
 }

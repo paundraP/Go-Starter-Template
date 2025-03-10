@@ -12,24 +12,25 @@ var (
 	MessageSuccessGetDetail            = "success get detail"
 	MessageSuccessSendVerificationMail = "send verify email success"
 	MessageSuccessUpdateUser           = "update user success"
+	MessageSuccessAddEducation         = "add education success"
 
-	MessageFailedBodyRequest = "body request failed"
-	MessageFailedRegister    = "register failed"
-	MessageFailedLogin       = "login failed"
-	MessageFailedGetDetail   = "failed get detail"
-	MessageFailedUpdateUser  = "failed update user"
+	MessageFailedBodyRequest  = "body request failed"
+	MessageFailedRegister     = "register failed"
+	MessageFailedLogin        = "login failed"
+	MessageFailedGetDetail    = "failed get detail"
+	MessageFailedUpdateUser   = "failed update user"
+	MessageFailedAddEducation = "failed add education success"
 
 	ErrAccountAlreadyVerified = errors.New("account already verified")
 	ErrEmailAlreadyExists     = errors.New("email already exists")
-	ErrEmailNotFound          = errors.New("email not found")
 	ErrUserNotFound           = errors.New("user not found")
-	ErrUserNotValid           = errors.New("user is not valid")
 	CredentialInvalid         = errors.New("credential invalid")
 	ErrUserNotVerified        = errors.New("user not verified")
 	ErrRegisterUserFailed     = errors.New("register user failed")
 	ErrTokenInvalid           = errors.New("token invalid")
 	ErrTokenExpired           = errors.New("token expired")
 	ErrUploadFile             = errors.New("upload file failed")
+	ErrUpdateEducation        = errors.New("update education failed")
 )
 
 type (
@@ -64,5 +65,23 @@ type (
 		Email string `json:"email"`
 		Token string `json:"token"`
 		Role  string `json:"role"`
+	}
+
+	UpdateUserRequest struct {
+		Name           string                `json:"name" form:"name"`
+		Email          string                `json:"email" form:"email" validate:"required,email"`
+		NewEmail       string                `json:"new_email" form:"new_email" validate:"email"`
+		About          string                `json:"about" form:"about"`
+		Address        string                `json:"address" form:"address"`
+		CurrentTitle   string                `json:"current_title" form:"current_title"`
+		ProfilePicture *multipart.FileHeader `json:"profile_picture" form:"profile_picture"`
+		Headline       *multipart.FileHeader `json:"headline" form:"headline"`
+	}
+
+	UpdateUserEducationRequest struct {
+		SchoolName   string `json:"school_name" form:"school_name" validate:"required"`
+		Degree       string `json:"degree" form:"degree"`
+		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
+		Description  string `json:"description" form:"description"`
 	}
 )
