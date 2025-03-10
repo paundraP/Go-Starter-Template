@@ -5,6 +5,7 @@ import (
 	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
 	"Go-Starter-Template/internal/utils/storage"
+	jwtService "Go-Starter-Template/pkg/jwt"
 	"context"
 	"fmt"
 	"github.com/google/uuid"
@@ -21,11 +22,12 @@ type (
 	userService struct {
 		userRepository UserRepository
 		awsS3          storage.AwsS3
+		jwtService     jwtService.JWTService
 	}
 )
 
-func NewUserService(userRepository UserRepository, awsS3 storage.AwsS3) UserService {
-	return &userService{userRepository: userRepository, awsS3: awsS3}
+func NewUserService(userRepository UserRepository, awsS3 storage.AwsS3, jwtService jwtService.JWTService) UserService {
+	return &userService{userRepository: userRepository, awsS3: awsS3, jwtService: jwtService}
 }
 
 var VerifyEmailRoute = "api/verify_email/user"
@@ -100,10 +102,7 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 		return domain.UserLoginResponse{}, domain.CredentialInvalid
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Role)
-	if err != nil {
-		return domain.UserLoginResponse{}, err
-	}
+	token := s.jwtService.GenerateTokenUser(user.ID.String(), user.Role)
 
 	return domain.UserLoginResponse{
 		Email: user.Email,
