@@ -123,8 +123,8 @@ func (r *userRepository) GetProfile(ctx context.Context, id uuid.UUID) (domain.U
 			CompanyID:   exp.CompanyID.String(),
 			CompanyName: exp.Company.Name,
 			Location:    exp.Location,
-			StartDate:   exp.StartedAt.String(),
-			EndDate:     exp.EndedAt.String(),
+			StartDate:   exp.StartedAt.Format("01-02-2006"),
+			EndDate:     exp.EndedAt.Format("01-02-2006"),
 			Description: exp.Description,
 		}
 	}

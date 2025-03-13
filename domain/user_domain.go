@@ -61,28 +61,30 @@ type (
 	UserPersonalInfo struct {
 		Name           string `json:"name"`
 		About          string `json:"about"`
-		Address        string `json:"address"`
-		CurrentTitle   string `json:"current_title"`
-		ProfilePicture string `json:"profile_picture"`
-		Headline       string `json:"headline"`
+		Address        string `json:"location"`
+		CurrentTitle   string `json:"headline"`
+		ProfilePicture string `json:"profilePicture"`
+		Headline       string `json:"cover"`
 	}
 
 	UserEducation struct {
 		ID           string `json:"id"`
-		SchoolName   string `json:"school_name"`
+		SchoolName   string `json:"school"`
 		Degree       string `json:"degree"`
-		FieldOfStudy string `json:"field_of_study"`
+		FieldOfStudy string `json:"field"`
 		Description  string `json:"description"`
+		StartDate    string `json:"startDate"`
+		EndDate      string `json:"endDate"`
 	}
 
 	UserExperience struct {
 		ID          string `json:"id"`
 		Title       string `json:"title"`
 		CompanyID   string `json:"company_id"`
-		CompanyName string `json:"company_name"`
+		CompanyName string `json:"company"`
 		Location    string `json:"location"`
-		StartDate   string `json:"started_at"`
-		EndDate     string `json:"ended_at"`
+		StartDate   string `json:"startDate"`
+		EndDate     string `json:"endDate"`
 		Description string `json:"description"`
 	}
 
