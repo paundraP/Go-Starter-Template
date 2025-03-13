@@ -44,6 +44,12 @@ func (c *Config) User() {
 			experience.Delete("/delete-experience/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteExperience)
 		}
 
+		skills := user.Group("/skill")
+		{
+			skills.Post("/add-skill", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostSkill)
+			skills.Delete("/delete-skill/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteSkill)
+		}
+
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JwtService), c.MidtransHandler.CreateTransaction)
 
 	}

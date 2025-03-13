@@ -16,6 +16,7 @@ var (
 	MessageSuccessUpdateEducation      = "update education success"
 	MessageSuccessDeleteEducation      = "delete education success"
 	MessageSuccessDeleteExperience     = "delete experience success"
+	MessageSuccessAddSkill             = "add skill success"
 
 	MessageFailedBodyRequest      = "body request failed"
 	MessageFailedRegister         = "register failed"
@@ -26,6 +27,7 @@ var (
 	MessageFailedDeleteExperience = "failed delete experience"
 	MessageFailedUpdateEducation  = "failed delete education"
 	MessageFailedDeleteEducation  = "failed delete education"
+	MessageFailedAddSkill         = "failed add skill"
 
 	ErrAccountAlreadyVerified = errors.New("account already verified")
 	ErrEmailAlreadyExists     = errors.New("email already exists")
@@ -41,6 +43,8 @@ var (
 	ErrPostExperience         = errors.New("post experience failed")
 	ErrUpdateExperience       = errors.New("update experience failed")
 	ErrDeleteExperience       = errors.New("delete experience failed")
+	ErrPostSkill              = errors.New("add skill failed")
+	ErrDeleteSkill            = errors.New("delete skill failed")
 )
 
 type (
@@ -120,5 +124,9 @@ type (
 		StartDate    string `json:"start_date" form:"start_date" validate:"required"`
 		EndDate      string `json:"end_date" form:"end_date"`
 		Description  string `json:"description" form:"description"`
+	}
+
+	PostUserSkillRequest struct {
+		SkillID string `json:"skill_id" form:"skill_id" validate:"required"`
 	}
 )

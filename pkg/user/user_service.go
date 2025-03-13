@@ -24,6 +24,8 @@ type (
 		PostExperience(ctx context.Context, req domain.PostUserExperienceRequest, userID string) error
 		UpdateExperience(ctx context.Context, req domain.UpdateUserExperienceRequest, userID string) error
 		DeleteExperience(ctx context.Context, experienceID string) error
+		PostSkill(ctx context.Context, req domain.PostUserSkillRequest, userID string) error
+		DeleteSkill(ctx context.Context, skillID string) error
 	}
 
 	userService struct {
@@ -350,6 +352,54 @@ func (s *userService) DeleteExperience(ctx context.Context, experienceID string)
 
 	if err := s.userRepository.DeleteExperience(ctx, id); err != nil {
 		return domain.ErrDeleteExperience
+	}
+
+	return nil
+}
+
+func (s *userService) PostSkill(ctx context.Context, req domain.PostUserSkillRequest, userID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID
+	// ); !exist {
+	// 	return domain.ErrUserNotFound
+
+	userid, err := uuid.Parse(userID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	skillid, err := uuid.Parse(req.SkillID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	skill := entities.UserSkill{
+		ID:      uuid.New(),
+		UserID:  userid,
+		SkillID: skillid,
+	}
+
+	if err := s.userRepository.PostSkill(ctx, skill); err != nil {
+		return domain.ErrPostSkill
+	}
+
+	return nil
+}
+
+func (s *userService) DeleteSkill(ctx context.Context, skillID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID
+	// ); !exist {
+	// 	return domain.ErrUserNotFound
+
+	id, err := uuid.Parse(skillID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	if err := s.userRepository.DeleteSkill(ctx, id); err != nil {
+		return domain.ErrDeleteSkill
 	}
 
 	return nil

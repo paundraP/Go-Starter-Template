@@ -20,6 +20,8 @@ type (
 		PostExperience(c *fiber.Ctx) error
 		UpdateExperience(c *fiber.Ctx) error
 		DeleteExperience(c *fiber.Ctx) error
+		PostSkill(c *fiber.Ctx) error
+		DeleteSkill(c *fiber.Ctx) error
 	}
 	userHandler struct {
 		UserService user.UserService
@@ -174,4 +176,34 @@ func (h *userHandler) DeleteExperience(c *fiber.Ctx) error {
 	}
 
 	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessDeleteExperience)
+}
+
+func (h *userHandler) PostSkill(c *fiber.Ctx) error {
+	req := new(domain.PostUserSkillRequest)
+
+	if err := c.BodyParser(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	if err := h.Validator.Struct(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	userid := c.Locals("user_id").(string)
+
+	if err := h.UserService.PostSkill(c.Context(), *req, userid); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddSkill, err)
+	}
+
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddSkill)
+}
+
+func (h *userHandler) DeleteSkill(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	if err := h.UserService.DeleteSkill(c.Context(), id); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedDeleteEducation, err)
+	}
+
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessDeleteEducation)
 }

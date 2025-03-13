@@ -22,6 +22,8 @@ type (
 		PostExperience(ctx context.Context, req entities.UserExperience) error
 		UpdateExperience(ctx context.Context, req entities.UserExperience) error
 		DeleteExperience(ctx context.Context, id uuid.UUID) error
+		PostSkill(ctx context.Context, req entities.UserSkill) error
+		DeleteSkill(ctx context.Context, id uuid.UUID) error
 	}
 	userRepository struct {
 		db *gorm.DB
@@ -122,6 +124,20 @@ func (r *userRepository) UpdateExperience(ctx context.Context, req entities.User
 
 func (r *userRepository) DeleteExperience(ctx context.Context, id uuid.UUID) error {
 	if err := r.db.WithContext(ctx).Delete(&entities.UserExperience{}, id).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) PostSkill(ctx context.Context, req entities.UserSkill) error {
+	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) DeleteSkill(ctx context.Context, id uuid.UUID) error {
+	if err := r.db.WithContext(ctx).Delete(&entities.UserSkill{}, id).Error; err != nil {
 		return err
 	}
 	return nil
