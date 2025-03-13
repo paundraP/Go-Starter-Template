@@ -4,6 +4,7 @@ import (
 	"Go-Starter-Template/entities"
 	"context"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -18,6 +19,7 @@ type (
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
 		PostExperience(ctx context.Context, req entities.UserExperience) error
 		UpdateExperience(ctx context.Context, req entities.UserExperience) error
+		DeleteExperience(ctx context.Context, id uuid.UUID) error
 	}
 	userRepository struct {
 		db *gorm.DB
@@ -97,6 +99,13 @@ func (r *userRepository) PostExperience(ctx context.Context, req entities.UserEx
 
 func (r *userRepository) UpdateExperience(ctx context.Context, req entities.UserExperience) error {
 	if err := r.db.WithContext(ctx).Updates(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) DeleteExperience(ctx context.Context, id uuid.UUID) error {
+	if err := r.db.WithContext(ctx).Delete(&entities.UserExperience{}, id).Error; err != nil {
 		return err
 	}
 	return nil

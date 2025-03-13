@@ -32,6 +32,7 @@ func (c *Config) User() {
 		user.Post("/update-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateEducation)
 		user.Post("/post-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostExperience)
 		user.Patch("/update-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateExperience)
+		user.Delete("/delete-experience/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteExperience)
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JwtService), c.MidtransHandler.CreateTransaction)
 	}
 }

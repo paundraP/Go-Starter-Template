@@ -21,6 +21,7 @@ type (
 		UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error
 		PostExperience(ctx context.Context, req domain.PostUserExperienceRequest, userID string) error
 		UpdateExperience(ctx context.Context, req domain.UpdateUserExperienceRequest, userID string) error
+		DeleteExperience(ctx context.Context, experienceID string) error
 	}
 
 	userService struct {
@@ -281,6 +282,25 @@ func (s *userService) UpdateExperience(ctx context.Context, req domain.UpdateUse
 
 	if err := s.userRepository.UpdateExperience(ctx, userExperience); err != nil {
 		return domain.ErrUpdateExperience
+	}
+
+	return nil
+}
+
+func (s *userService) DeleteExperience(ctx context.Context, experienceID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID
+	// ); !exist {
+	// 	return domain.ErrUserNotFound
+	// }
+
+	id, err := uuid.Parse(experienceID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	if err := s.userRepository.DeleteExperience(ctx, id); err != nil {
+		return domain.ErrDeleteExperience
 	}
 
 	return nil

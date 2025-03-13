@@ -17,6 +17,7 @@ type (
 		UpdateEducation(c *fiber.Ctx) error
 		PostExperience(c *fiber.Ctx) error
 		UpdateExperience(c *fiber.Ctx) error
+		DeleteExperience(c *fiber.Ctx) error
 	}
 	userHandler struct {
 		UserService user.UserService
@@ -138,4 +139,14 @@ func (h *userHandler) UpdateExperience(c *fiber.Ctx) error {
 	}
 
 	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddEducation)
+}
+
+func (h *userHandler) DeleteExperience(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	if err := h.UserService.DeleteExperience(c.Context(), id); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedDeleteExperience, err)
+	}
+
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessDeleteExperience)
 }

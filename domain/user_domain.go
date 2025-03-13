@@ -13,13 +13,15 @@ var (
 	MessageSuccessSendVerificationMail = "send verify email success"
 	MessageSuccessUpdateUser           = "update user success"
 	MessageSuccessAddEducation         = "add education success"
+	MessageSuccessDeleteExperience     = "delete experience success"
 
-	MessageFailedBodyRequest  = "body request failed"
-	MessageFailedRegister     = "register failed"
-	MessageFailedLogin        = "login failed"
-	MessageFailedGetDetail    = "failed get detail"
-	MessageFailedUpdateUser   = "failed update user"
-	MessageFailedAddEducation = "failed add education success"
+	MessageFailedBodyRequest      = "body request failed"
+	MessageFailedRegister         = "register failed"
+	MessageFailedLogin            = "login failed"
+	MessageFailedGetDetail        = "failed get detail"
+	MessageFailedUpdateUser       = "failed update user"
+	MessageFailedAddEducation     = "failed add education success"
+	MessageFailedDeleteExperience = "failed delete experience"
 
 	ErrAccountAlreadyVerified = errors.New("account already verified")
 	ErrEmailAlreadyExists     = errors.New("email already exists")
@@ -33,6 +35,7 @@ var (
 	ErrUpdateEducation        = errors.New("update education failed")
 	ErrPostExperience         = errors.New("post experience failed")
 	ErrUpdateExperience       = errors.New("update experience failed")
+	ErrDeleteExperience       = errors.New("delete experience failed")
 )
 
 type (
