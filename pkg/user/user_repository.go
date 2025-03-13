@@ -116,6 +116,8 @@ func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.Us
 			Degree:       edu.Degree,
 			FieldOfStudy: edu.FieldOfStudy,
 			Description:  edu.Description,
+			StartDate:    edu.StartedAt.Format("01-02-2006"),
+			EndDate:      edu.EndedAt.Format("01-02-2006"),
 		}
 	}
 

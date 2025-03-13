@@ -148,7 +148,7 @@ type (
 	}
 
 	UpdateUserEducationRequest struct {
-		EducationID  string `json:"education_id" form:"education_id" validate:"required"`
+		EducationID  string `json:"id" form:"id" validate:"required"`
 		SchoolName   string `json:"school_name" form:"school_name" validate:"required"`
 		Degree       string `json:"degree" form:"degree"`
 		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
