@@ -53,11 +53,13 @@ func (r *userRepository) CheckUserByEmail(ctx context.Context, email string) boo
 	}
 	return true
 }
+
 func (r *userRepository) CheckUserByID(ctx context.Context, id string) bool {
 	var user entities.User
-	if err := r.db.WithContext(ctx).First(user, "id = ?", id).Error; err != nil {
+	if err := r.db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
 		return false
 	}
+
 	if user.ID.String() != id {
 		return false
 	}

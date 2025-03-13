@@ -122,10 +122,6 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 }
 
 func (s *userService) GetProfile(ctx context.Context, slug string) (domain.UserProfile, error) {
-	// if exist := s.userRepository.CheckUserByID(ctx, userID
-	// ); !exist {
-	// 	return domain.UserRegisterResponse{}, domain.ErrUserNotFound
-
 	res, err := s.userRepository.GetProfile(ctx, slug)
 
 	if err != nil {
@@ -183,9 +179,9 @@ func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRe
 }
 
 func (s *userService) PostEducation(ctx context.Context, req domain.PostUserEducationRequest, userID string) error {
-	// if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
-	// 	return domain.ErrUserNotFound
-	// }
+	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+		return domain.ErrUserNotFound
+	}
 	userid, err := uuid.Parse(userID)
 	if err != nil {
 		return domain.ErrParseUUID
@@ -220,6 +216,10 @@ func (s *userService) PostEducation(ctx context.Context, req domain.PostUserEduc
 }
 
 func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error {
+	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+		return domain.ErrUserNotFound
+	}
+
 	userid, err := uuid.Parse(userID)
 
 	if err != nil {
@@ -281,9 +281,9 @@ func (s *userService) DeleteEducation(ctx context.Context, educationID string) e
 }
 
 func (s *userService) PostExperience(ctx context.Context, req domain.PostUserExperienceRequest, userID string) error {
-	// if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
-	// 	return domain.ErrUserNotFound
-	// }
+	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+		return domain.ErrUserNotFound
+	}
 
 	userid, err := uuid.Parse(userID)
 
@@ -402,9 +402,9 @@ func (s *userService) DeleteExperience(ctx context.Context, experienceID string)
 }
 
 func (s *userService) PostSkill(ctx context.Context, req domain.PostUserSkillRequest, userID string) error {
-	// if exist := s.userRepository.CheckUserByID(ctx, userID
-	// ); !exist {
-	// 	return domain.ErrUserNotFound
+	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+		return domain.ErrUserNotFound
+	}
 
 	userid, err := uuid.Parse(userID)
 
