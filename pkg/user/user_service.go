@@ -17,7 +17,7 @@ type (
 	UserService interface {
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
-		GetProfile(ctx context.Context, userID string) (domain.UserProfile, error)
+		GetProfile(ctx context.Context, userID string) (domain.UserProfileResponse, error)
 		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
 		PostEducation(ctx context.Context, req domain.PostUserEducationRequest, userID string) error
 		DeleteEducation(ctx context.Context, educationID string) error
