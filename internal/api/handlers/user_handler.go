@@ -73,8 +73,8 @@ func (h *userHandler) Login(c *fiber.Ctx) error {
 }
 
 func (h *userHandler) GetProfile(c *fiber.Ctx) error {
-	userid := c.Params("id")
-	res, err := h.UserService.GetProfile(c.Context(), userid)
+	slug := c.Params("slug")
+	res, err := h.UserService.GetProfile(c.Context(), slug)
 	if err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedGetProfile, err)
 	}

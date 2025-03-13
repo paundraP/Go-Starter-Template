@@ -121,18 +121,12 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 	}, nil
 }
 
-func (s *userService) GetProfile(ctx context.Context, userID string) (domain.UserProfile, error) {
+func (s *userService) GetProfile(ctx context.Context, slug string) (domain.UserProfile, error) {
 	// if exist := s.userRepository.CheckUserByID(ctx, userID
 	// ); !exist {
 	// 	return domain.UserRegisterResponse{}, domain.ErrUserNotFound
 
-	id, err := uuid.Parse(userID)
-
-	if err != nil {
-		return domain.UserProfile{}, domain.ErrParseUUID
-	}
-
-	res, err := s.userRepository.GetProfile(ctx, id)
+	res, err := s.userRepository.GetProfile(ctx, slug)
 
 	if err != nil {
 		return domain.UserProfile{}, domain.ErrGetProfile

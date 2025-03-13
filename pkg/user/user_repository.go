@@ -16,7 +16,7 @@ type (
 		GetUserByEmail(ctx context.Context, email string) (entities.User, error)
 		CheckUserByID(ctx context.Context, id string) bool
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
-		GetProfile(ctx context.Context, id uuid.UUID) (domain.UserProfile, error)
+		GetProfile(ctx context.Context, slug string) (domain.UserProfile, error)
 		UpdateProfile(ctx context.Context, user entities.User) error
 		PostEducation(ctx context.Context, req entities.UserEducation) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
@@ -82,25 +82,27 @@ func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID st
 	return nil
 }
 
-func (r *userRepository) GetProfile(ctx context.Context, id uuid.UUID) (domain.UserProfile, error) {
+func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.UserProfile, error) {
 	var user entities.User
 	var education []entities.UserEducation
 	var experience []entities.UserExperience
 	var skill []entities.UserSkill
 
-	if err := r.db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
+	if err := r.db.WithContext(ctx).
+		Where("slug = ?", slug).
+		First(&user).Error; err != nil {
 		return domain.UserProfile{}, err
 	}
 
-	if err := r.db.WithContext(ctx).Find(&education, "user_id = ?", id).Error; err != nil {
+	if err := r.db.WithContext(ctx).Find(&education, "user_id = ?", user.ID).Error; err != nil {
 		return domain.UserProfile{}, err
 	}
 
-	if err := r.db.WithContext(ctx).Preload("Company").Find(&experience, "user_id = ?", id).Error; err != nil {
+	if err := r.db.WithContext(ctx).Preload("Company").Find(&experience, "user_id = ?", user.ID).Error; err != nil {
 		return domain.UserProfile{}, err
 	}
 
-	if err := r.db.WithContext(ctx).Preload("Skill").Find(&skill, "user_id = ?", id).Error; err != nil {
+	if err := r.db.WithContext(ctx).Preload("Skill").Find(&skill, "user_id = ?", user.ID).Error; err != nil {
 		return domain.UserProfile{}, err
 	}
 
