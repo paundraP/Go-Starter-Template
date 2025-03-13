@@ -14,7 +14,9 @@ type (
 		RegisterUser(c *fiber.Ctx) error
 		Login(c *fiber.Ctx) error
 		UpdateProfile(c *fiber.Ctx) error
+		PostEducation(c *fiber.Ctx) error
 		UpdateEducation(c *fiber.Ctx) error
+		DeleteEducation(c *fiber.Ctx) error
 		PostExperience(c *fiber.Ctx) error
 		UpdateExperience(c *fiber.Ctx) error
 		DeleteExperience(c *fiber.Ctx) error
@@ -85,8 +87,8 @@ func (h *userHandler) UpdateProfile(c *fiber.Ctx) error {
 	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessUpdateUser)
 }
 
-func (h *userHandler) UpdateEducation(c *fiber.Ctx) error {
-	req := new(domain.UpdateUserEducationRequest)
+func (h *userHandler) PostEducation(c *fiber.Ctx) error {
+	req := new(domain.PostUserEducationRequest)
 	userid := c.Locals("user_id").(string)
 	if err := c.BodyParser(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
@@ -95,10 +97,33 @@ func (h *userHandler) UpdateEducation(c *fiber.Ctx) error {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
 	}
 
-	if err := h.UserService.UpdateEducation(c.Context(), *req, userid); err != nil {
+	if err := h.UserService.PostEducation(c.Context(), *req, userid); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddEducation, err)
 	}
 	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddEducation)
+}
+
+func (h *userHandler) UpdateEducation(c *fiber.Ctx) error {
+	req := new(domain.UpdateUserEducationRequest)
+	if err := c.BodyParser(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+	if err := h.Validator.Struct(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+	userid := c.Locals("user_id").(string)
+	if err := h.UserService.UpdateEducation(c.Context(), *req, userid); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedUpdateEducation, err)
+	}
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessUpdateEducation)
+}
+
+func (h *userHandler) DeleteEducation(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if err := h.UserService.DeleteEducation(c.Context(), id); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedDeleteEducation, err)
+	}
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessDeleteEducation)
 }
 
 func (h *userHandler) PostExperience(c *fiber.Ctx) error {

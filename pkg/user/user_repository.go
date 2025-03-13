@@ -16,7 +16,9 @@ type (
 		CheckUserByID(ctx context.Context, id string) bool
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
 		UpdateProfile(ctx context.Context, user entities.User) error
+		PostEducation(ctx context.Context, req entities.UserEducation) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
+		DeleteEducation(ctx context.Context, id uuid.UUID) error
 		PostExperience(ctx context.Context, req entities.UserExperience) error
 		UpdateExperience(ctx context.Context, req entities.UserExperience) error
 		DeleteExperience(ctx context.Context, id uuid.UUID) error
@@ -83,8 +85,22 @@ func (r *userRepository) UpdateProfile(ctx context.Context, user entities.User) 
 	return nil
 }
 
-func (r *userRepository) UpdateEducation(ctx context.Context, req entities.UserEducation) error {
+func (r *userRepository) PostEducation(ctx context.Context, req entities.UserEducation) error {
 	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) UpdateEducation(ctx context.Context, req entities.UserEducation) error {
+	if err := r.db.WithContext(ctx).Updates(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) DeleteEducation(ctx context.Context, id uuid.UUID) error {
+	if err := r.db.WithContext(ctx).Delete(&entities.UserEducation{}, id).Error; err != nil {
 		return err
 	}
 	return nil

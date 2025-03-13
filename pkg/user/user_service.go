@@ -18,6 +18,8 @@ type (
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
 		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
+		PostEducation(ctx context.Context, req domain.PostUserEducationRequest, userID string) error
+		DeleteEducation(ctx context.Context, educationID string) error
 		UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error
 		PostExperience(ctx context.Context, req domain.PostUserExperienceRequest, userID string) error
 		UpdateExperience(ctx context.Context, req domain.UpdateUserExperienceRequest, userID string) error
@@ -162,10 +164,10 @@ func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRe
 	return nil
 }
 
-func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error {
-	if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
-		return domain.ErrUserNotFound
-	}
+func (s *userService) PostEducation(ctx context.Context, req domain.PostUserEducationRequest, userID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+	// 	return domain.ErrUserNotFound
+	// }
 	userid, err := uuid.Parse(userID)
 	if err != nil {
 		return domain.ErrParseUUID
@@ -179,9 +181,56 @@ func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUser
 		Description:  req.Description,
 	}
 
-	if err := s.userRepository.UpdateEducation(ctx, education); err != nil {
+	if err := s.userRepository.PostEducation(ctx, education); err != nil {
 		return domain.ErrUpdateEducation
 	}
+	return nil
+}
+
+func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error {
+	userid, err := uuid.Parse(userID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	educationID, err := uuid.Parse(req.EducationID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	userEducation := entities.UserEducation{
+		ID:           educationID,
+		UserID:       userid,
+		SchoolName:   req.SchoolName,
+		Degree:       req.Degree,
+		FieldOfStudy: req.FieldOfStudy,
+		Description:  req.Description,
+	}
+
+	if err := s.userRepository.UpdateEducation(ctx, userEducation); err != nil {
+		return domain.ErrUpdateExperience
+	}
+
+	return nil
+}
+
+func (s *userService) DeleteEducation(ctx context.Context, educationID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID
+	// ); !exist {
+	// 	return domain.ErrUserNotFound
+
+	id, err := uuid.Parse(educationID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	if err := s.userRepository.DeleteEducation(ctx, id); err != nil {
+		return domain.ErrDeleteEducation
+	}
+
 	return nil
 }
 

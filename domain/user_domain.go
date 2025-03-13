@@ -13,6 +13,8 @@ var (
 	MessageSuccessSendVerificationMail = "send verify email success"
 	MessageSuccessUpdateUser           = "update user success"
 	MessageSuccessAddEducation         = "add education success"
+	MessageSuccessUpdateEducation      = "update education success"
+	MessageSuccessDeleteEducation      = "delete education success"
 	MessageSuccessDeleteExperience     = "delete experience success"
 
 	MessageFailedBodyRequest      = "body request failed"
@@ -22,6 +24,8 @@ var (
 	MessageFailedUpdateUser       = "failed update user"
 	MessageFailedAddEducation     = "failed add education success"
 	MessageFailedDeleteExperience = "failed delete experience"
+	MessageFailedUpdateEducation  = "failed delete education"
+	MessageFailedDeleteEducation  = "failed delete education"
 
 	ErrAccountAlreadyVerified = errors.New("account already verified")
 	ErrEmailAlreadyExists     = errors.New("email already exists")
@@ -33,6 +37,7 @@ var (
 	ErrTokenExpired           = errors.New("token expired")
 	ErrUploadFile             = errors.New("upload file failed")
 	ErrUpdateEducation        = errors.New("update education failed")
+	ErrDeleteEducation        = errors.New("delete education failed")
 	ErrPostExperience         = errors.New("post experience failed")
 	ErrUpdateExperience       = errors.New("update experience failed")
 	ErrDeleteExperience       = errors.New("delete experience failed")
@@ -83,7 +88,15 @@ type (
 		Headline       *multipart.FileHeader `json:"headline" form:"headline"`
 	}
 
+	PostUserEducationRequest struct {
+		SchoolName   string `json:"school_name" form:"school_name" validate:"required"`
+		Degree       string `json:"degree" form:"degree"`
+		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
+		Description  string `json:"description" form:"description"`
+	}
+
 	UpdateUserEducationRequest struct {
+		EducationID  string `json:"education_id" form:"education_id" validate:"required"`
 		SchoolName   string `json:"school_name" form:"school_name" validate:"required"`
 		Degree       string `json:"degree" form:"degree"`
 		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
