@@ -29,14 +29,23 @@ func (c *Config) User() {
 		user.Post("/register", c.UserHandler.RegisterUser)
 		user.Post("/login", c.UserHandler.Login)
 		user.Post("/update-profile", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateProfile)
-		user.Post("/add-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostEducation)
-		user.Patch("/update-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateEducation)
-		user.Delete("/delete-education/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteEducation)
-		user.Patch("update-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateExperience)
-		user.Post("/add-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostExperience)
-		user.Patch("/update-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateExperience)
-		user.Delete("/delete-experience/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteExperience)
+
+		education := user.Group("/education")
+		{
+			education.Post("/add-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostEducation)
+			education.Patch("/update-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateEducation)
+			education.Delete("/delete-education/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteEducation)
+		}
+
+		experience := user.Group("/experience")
+		{
+			experience.Patch("/update-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateExperience)
+			experience.Post("/add-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostExperience)
+			experience.Delete("/delete-experience/:id", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.DeleteExperience)
+		}
+
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JwtService), c.MidtransHandler.CreateTransaction)
+
 	}
 }
 
