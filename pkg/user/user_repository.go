@@ -16,7 +16,7 @@ type (
 		GetUserByEmail(ctx context.Context, email string) (entities.User, error)
 		CheckUserByID(ctx context.Context, id string) bool
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
-		GetProfile(ctx context.Context, slug string) (domain.UserProfile, error)
+		GetProfile(ctx context.Context, slug string) (domain.UserProfileResponse, error)
 		UpdateProfile(ctx context.Context, user entities.User) error
 		PostEducation(ctx context.Context, req entities.UserEducation) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
@@ -84,7 +84,7 @@ func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID st
 	return nil
 }
 
-func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.UserProfile, error) {
+func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.UserProfileResponse, error) {
 	var user entities.User
 	var education []entities.UserEducation
 	var experience []entities.UserExperience
@@ -93,24 +93,24 @@ func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.Us
 	if err := r.db.WithContext(ctx).
 		Where("slug = ?", slug).
 		First(&user).Error; err != nil {
-		return domain.UserProfile{}, err
+		return domain.UserProfileResponse{}, err
 	}
 
 	if err := r.db.WithContext(ctx).Find(&education, "user_id = ?", user.ID).Error; err != nil {
-		return domain.UserProfile{}, err
+		return domain.UserProfileResponse{}, err
 	}
 
 	if err := r.db.WithContext(ctx).Preload("Company").Find(&experience, "user_id = ?", user.ID).Error; err != nil {
-		return domain.UserProfile{}, err
+		return domain.UserProfileResponse{}, err
 	}
 
 	if err := r.db.WithContext(ctx).Preload("Skill").Find(&skill, "user_id = ?", user.ID).Error; err != nil {
-		return domain.UserProfile{}, err
+		return domain.UserProfileResponse{}, err
 	}
 
-	formattedEducations := make([]domain.UserEducation, len(education))
+	formattedEducations := make([]domain.UserEducationsResponse, len(education))
 	for i, edu := range education {
-		formattedEducations[i] = domain.UserEducation{
+		formattedEducations[i] = domain.UserEducationsResponse{
 			ID:           edu.ID.String(),
 			SchoolName:   edu.SchoolName,
 			Degree:       edu.Degree,
@@ -121,9 +121,9 @@ func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.Us
 		}
 	}
 
-	formattedExperiences := make([]domain.UserExperience, len(experience))
+	formattedExperiences := make([]domain.UserExperiencesResponse, len(experience))
 	for i, exp := range experience {
-		formattedExperiences[i] = domain.UserExperience{
+		formattedExperiences[i] = domain.UserExperiencesResponse{
 			ID:          exp.ID.String(),
 			Title:       exp.Title,
 			CompanyID:   exp.CompanyID.String(),
@@ -135,17 +135,17 @@ func (r *userRepository) GetProfile(ctx context.Context, slug string) (domain.Us
 		}
 	}
 
-	formattedSkills := make([]domain.UserSkill, len(skill))
+	formattedSkills := make([]domain.UserSkillsResponse, len(skill))
 	for i, sk := range skill {
-		formattedSkills[i] = domain.UserSkill{
+		formattedSkills[i] = domain.UserSkillsResponse{
 			ID:      sk.ID.String(),
 			SkillID: sk.SkillID.String(),
 			Name:    sk.Skill.Name,
 		}
 	}
 
-	return domain.UserProfile{
-		PersonalInfo: domain.UserPersonalInfo{
+	return domain.UserProfileResponse{
+		PersonalInfo: domain.UserPersonalInfoResponse{
 			Name:           user.Name,
 			About:          user.About,
 			Address:        user.Address,

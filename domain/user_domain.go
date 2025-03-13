@@ -51,14 +51,14 @@ var (
 )
 
 type (
-	UserProfile struct {
-		PersonalInfo UserPersonalInfo `json:"personal_info"`
-		Educations   []UserEducation  `json:"educations"`
-		Experiences  []UserExperience `json:"experiences"`
-		Skills       []UserSkill      `json:"skills"`
+	UserProfileResponse struct {
+		PersonalInfo UserPersonalInfoResponse  `json:"personal_info"`
+		Educations   []UserEducationsResponse  `json:"educations"`
+		Experiences  []UserExperiencesResponse `json:"experiences"`
+		Skills       []UserSkillsResponse      `json:"skills"`
 	}
 
-	UserPersonalInfo struct {
+	UserPersonalInfoResponse struct {
 		Name           string `json:"name"`
 		About          string `json:"about"`
 		Address        string `json:"location"`
@@ -67,7 +67,7 @@ type (
 		Headline       string `json:"cover"`
 	}
 
-	UserEducation struct {
+	UserEducationsResponse struct {
 		ID           string `json:"id"`
 		SchoolName   string `json:"school"`
 		Degree       string `json:"degree"`
@@ -77,7 +77,7 @@ type (
 		EndDate      string `json:"endDate"`
 	}
 
-	UserExperience struct {
+	UserExperiencesResponse struct {
 		ID          string `json:"id"`
 		Title       string `json:"title"`
 		CompanyID   string `json:"company_id"`
@@ -88,7 +88,7 @@ type (
 		Description string `json:"description"`
 	}
 
-	UserSkill struct {
+	UserSkillsResponse struct {
 		ID      string `json:"id"`
 		SkillID string `json:"skill_id"`
 		Name    string `json:"name"`
