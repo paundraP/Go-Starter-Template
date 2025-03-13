@@ -4,6 +4,7 @@ import (
 	"Go-Starter-Template/domain"
 	"Go-Starter-Template/internal/api/presenters"
 	"Go-Starter-Template/pkg/user"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,6 +15,7 @@ type (
 		Login(c *fiber.Ctx) error
 		UpdateProfile(c *fiber.Ctx) error
 		UpdateEducation(c *fiber.Ctx) error
+		PostExperience(c *fiber.Ctx) error
 	}
 	userHandler struct {
 		UserService user.UserService
@@ -94,5 +96,25 @@ func (h *userHandler) UpdateEducation(c *fiber.Ctx) error {
 	if err := h.UserService.UpdateEducation(c.Context(), *req, userid); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddEducation, err)
 	}
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddEducation)
+}
+
+func (h *userHandler) PostExperience(c *fiber.Ctx) error {
+	req := new(domain.PostUserJobRequest)
+
+	if err := c.BodyParser(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	if err := h.Validator.Struct(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	userid := c.Locals("user_id").(string)
+
+	if err := h.UserService.PostJob(c.Context(), *req, userid); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddEducation, err)
+	}
+
 	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddEducation)
 }

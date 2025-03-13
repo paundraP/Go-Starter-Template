@@ -8,6 +8,8 @@ import (
 	jwtService "Go-Starter-Template/pkg/jwt"
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -17,6 +19,7 @@ type (
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
 		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
 		UpdateEducation(ctx context.Context, req domain.UpdateUserEducationRequest, userID string) error
+		PostJob(ctx context.Context, req domain.PostUserJobRequest, userID string) error
 	}
 
 	userService struct {
@@ -178,4 +181,52 @@ func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUser
 		return domain.ErrUpdateEducation
 	}
 	return nil
+}
+
+func (s *userService) PostJob(ctx context.Context, req domain.PostUserJobRequest, userID string) error {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID); !exist {
+	// 	return domain.ErrUserNotFound
+	// }
+
+	userid, err := uuid.Parse(userID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	companyID, err := uuid.Parse(req.CompanyID)
+
+	if err != nil {
+		return domain.ErrParseUUID
+	}
+
+	userExperience := entities.UserExperience{
+		ID:          uuid.New(),
+		UserID:      userid,
+		Title:       req.Title,
+		CompanyID:   companyID,
+		Location:    req.Location,
+		Description: req.Description,
+		StartedAt: func() time.Time {
+			startedAt, err := time.Parse("2006-01-02", req.StartDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return startedAt
+		}(),
+		EndedAt: func() time.Time {
+			endedAt, err := time.Parse("2006-01-02", req.EndDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return endedAt
+		}(),
+	}
+
+	if err := s.userRepository.PostExperience(ctx, userExperience); err != nil {
+		return domain.ErrPostExperience
+	}
+
+	return nil
+
 }

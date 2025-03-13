@@ -4,6 +4,7 @@ import (
 	"Go-Starter-Template/internal/api/handlers"
 	"Go-Starter-Template/internal/middleware"
 	jwtService "Go-Starter-Template/pkg/jwt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -29,6 +30,7 @@ func (c *Config) User() {
 		user.Post("/login", c.UserHandler.Login)
 		user.Post("/update-profile", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateProfile)
 		user.Post("/update-education", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateEducation)
+		user.Post("/post-experience", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.PostExperience)
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JwtService), c.MidtransHandler.CreateTransaction)
 	}
 }

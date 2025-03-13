@@ -3,6 +3,7 @@ package user
 import (
 	"Go-Starter-Template/entities"
 	"context"
+
 	"gorm.io/gorm"
 )
 
@@ -15,6 +16,7 @@ type (
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
 		UpdateProfile(ctx context.Context, user entities.User) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
+		PostExperience(ctx context.Context, req entities.UserExperience) error
 	}
 	userRepository struct {
 		db *gorm.DB
@@ -79,6 +81,13 @@ func (r *userRepository) UpdateProfile(ctx context.Context, user entities.User) 
 }
 
 func (r *userRepository) UpdateEducation(ctx context.Context, req entities.UserEducation) error {
+	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) PostExperience(ctx context.Context, req entities.UserExperience) error {
 	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
 		return err
 	}
