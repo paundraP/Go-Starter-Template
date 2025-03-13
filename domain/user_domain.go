@@ -122,9 +122,13 @@ type (
 	}
 
 	UserLoginResponse struct {
-		Email string `json:"email"`
-		Token string `json:"token"`
-		Role  string `json:"role"`
+		Email          string `json:"email"`
+		Token          string `json:"token"`
+		Role           string `json:"role"`
+		Slug           string `json:"slug"`
+		Name           string `json:"name"`
+		CurrentTitle   string `json:"current_title"`
+		ProfilePicture string `json:"profile_picture"`
 	}
 
 	UpdateUserRequest struct {

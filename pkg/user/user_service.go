@@ -115,9 +115,13 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 	token := s.jwtService.GenerateTokenUser(user.ID.String(), user.Role)
 
 	return domain.UserLoginResponse{
-		Email: user.Email,
-		Token: token,
-		Role:  user.Role,
+		Email:          user.Email,
+		Token:          token,
+		Role:           user.Role,
+		Slug:           user.Slug,
+		Name:           user.Name,
+		CurrentTitle:   user.CurrentTitle,
+		ProfilePicture: user.ProfilePicture,
 	}, nil
 }
 
