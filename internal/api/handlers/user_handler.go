@@ -16,6 +16,7 @@ type (
 		UpdateProfile(c *fiber.Ctx) error
 		UpdateEducation(c *fiber.Ctx) error
 		PostExperience(c *fiber.Ctx) error
+		UpdateExperience(c *fiber.Ctx) error
 	}
 	userHandler struct {
 		UserService user.UserService
@@ -100,7 +101,7 @@ func (h *userHandler) UpdateEducation(c *fiber.Ctx) error {
 }
 
 func (h *userHandler) PostExperience(c *fiber.Ctx) error {
-	req := new(domain.PostUserJobRequest)
+	req := new(domain.PostUserExperienceRequest)
 
 	if err := c.BodyParser(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
@@ -112,7 +113,27 @@ func (h *userHandler) PostExperience(c *fiber.Ctx) error {
 
 	userid := c.Locals("user_id").(string)
 
-	if err := h.UserService.PostJob(c.Context(), *req, userid); err != nil {
+	if err := h.UserService.PostExperience(c.Context(), *req, userid); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddEducation, err)
+	}
+
+	return presenters.SuccessResponse(c, nil, fiber.StatusOK, domain.MessageSuccessAddEducation)
+}
+
+func (h *userHandler) UpdateExperience(c *fiber.Ctx) error {
+	req := new(domain.UpdateUserExperienceRequest)
+
+	if err := c.BodyParser(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	if err := h.Validator.Struct(req); err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
+	}
+
+	userid := c.Locals("user_id").(string)
+
+	if err := h.UserService.UpdateExperience(c.Context(), *req, userid); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedAddEducation, err)
 	}
 

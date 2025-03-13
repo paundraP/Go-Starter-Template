@@ -32,6 +32,7 @@ var (
 	ErrUploadFile             = errors.New("upload file failed")
 	ErrUpdateEducation        = errors.New("update education failed")
 	ErrPostExperience         = errors.New("post experience failed")
+	ErrUpdateExperience       = errors.New("update experience failed")
 )
 
 type (
@@ -86,12 +87,22 @@ type (
 		Description  string `json:"description" form:"description"`
 	}
 
-	PostUserJobRequest struct {
+	PostUserExperienceRequest struct {
 		Title       string `json:"title" form:"title" validate:"required"`
 		CompanyID   string `json:"company_id" form:"company_id" validate:"required"`
 		Location    string `json:"location" form:"location" validate:"required"`
 		StartDate   string `json:"start_date" form:"start_date" validate:"required"`
 		EndDate     string `json:"end_date" form:"end_date"`
 		Description string `json:"description" form:"description"`
+	}
+
+	UpdateUserExperienceRequest struct {
+		ExperienceID string `json:"experience_id" form:"experience_id" validate:"required"`
+		Title        string `json:"title" form:"title" validate:"required"`
+		CompanyID    string `json:"company_id" form:"company_id" validate:"required"`
+		Location     string `json:"location" form:"location" validate:"required"`
+		StartDate    string `json:"start_date" form:"start_date" validate:"required"`
+		EndDate      string `json:"end_date" form:"end_date"`
+		Description  string `json:"description" form:"description"`
 	}
 )

@@ -17,6 +17,7 @@ type (
 		UpdateProfile(ctx context.Context, user entities.User) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
 		PostExperience(ctx context.Context, req entities.UserExperience) error
+		UpdateExperience(ctx context.Context, req entities.UserExperience) error
 	}
 	userRepository struct {
 		db *gorm.DB
@@ -89,6 +90,13 @@ func (r *userRepository) UpdateEducation(ctx context.Context, req entities.UserE
 
 func (r *userRepository) PostExperience(ctx context.Context, req entities.UserExperience) error {
 	if err := r.db.WithContext(ctx).Create(&req).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *userRepository) UpdateExperience(ctx context.Context, req entities.UserExperience) error {
+	if err := r.db.WithContext(ctx).Updates(&req).Error; err != nil {
 		return err
 	}
 	return nil
