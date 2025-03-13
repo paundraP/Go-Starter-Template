@@ -28,6 +28,7 @@ func (c *Config) User() {
 	{
 		user.Post("/register", c.UserHandler.RegisterUser)
 		user.Post("/login", c.UserHandler.Login)
+		user.Get("/profile/:id", c.UserHandler.GetProfile)
 		user.Post("/update-profile", c.Middleware.AuthMiddleware(c.JwtService), c.UserHandler.UpdateProfile)
 
 		education := user.Group("/education")

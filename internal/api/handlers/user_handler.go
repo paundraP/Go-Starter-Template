@@ -13,6 +13,7 @@ type (
 	UserHandler interface {
 		RegisterUser(c *fiber.Ctx) error
 		Login(c *fiber.Ctx) error
+		GetProfile(c *fiber.Ctx) error
 		UpdateProfile(c *fiber.Ctx) error
 		PostEducation(c *fiber.Ctx) error
 		UpdateEducation(c *fiber.Ctx) error
@@ -69,6 +70,15 @@ func (h *userHandler) Login(c *fiber.Ctx) error {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedLogin, err)
 	}
 	return presenters.SuccessResponse(c, res, fiber.StatusOK, domain.MessageSuccessLogin)
+}
+
+func (h *userHandler) GetProfile(c *fiber.Ctx) error {
+	userid := c.Params("id")
+	res, err := h.UserService.GetProfile(c.Context(), userid)
+	if err != nil {
+		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedGetProfile, err)
+	}
+	return presenters.SuccessResponse(c, res, fiber.StatusOK, domain.MessageSuccessGetProfile)
 }
 
 func (h *userHandler) UpdateProfile(c *fiber.Ctx) error {

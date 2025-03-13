@@ -12,6 +12,7 @@ var (
 	MessageSuccessGetDetail            = "success get detail"
 	MessageSuccessSendVerificationMail = "send verify email success"
 	MessageSuccessUpdateUser           = "update user success"
+	MessageSuccessGetProfile           = "get profile success"
 	MessageSuccessAddEducation         = "add education success"
 	MessageSuccessUpdateEducation      = "update education success"
 	MessageSuccessDeleteEducation      = "delete education success"
@@ -23,6 +24,7 @@ var (
 	MessageFailedLogin            = "login failed"
 	MessageFailedGetDetail        = "failed get detail"
 	MessageFailedUpdateUser       = "failed update user"
+	MessageFailedGetProfile       = "failed get profile"
 	MessageFailedAddEducation     = "failed add education success"
 	MessageFailedDeleteExperience = "failed delete experience"
 	MessageFailedUpdateEducation  = "failed delete education"
@@ -45,9 +47,51 @@ var (
 	ErrDeleteExperience       = errors.New("delete experience failed")
 	ErrPostSkill              = errors.New("add skill failed")
 	ErrDeleteSkill            = errors.New("delete skill failed")
+	ErrGetProfile             = errors.New("get profile failed")
 )
 
 type (
+	UserProfile struct {
+		PersonalInfo UserPersonalInfo `json:"personal_info"`
+		Educations   []UserEducation  `json:"educations"`
+		Experiences  []UserExperience `json:"experiences"`
+		Skills       []UserSkill      `json:"skills"`
+	}
+
+	UserPersonalInfo struct {
+		Name           string `json:"name"`
+		About          string `json:"about"`
+		Address        string `json:"address"`
+		CurrentTitle   string `json:"current_title"`
+		ProfilePicture string `json:"profile_picture"`
+		Headline       string `json:"headline"`
+	}
+
+	UserEducation struct {
+		ID           string `json:"id"`
+		SchoolName   string `json:"school_name"`
+		Degree       string `json:"degree"`
+		FieldOfStudy string `json:"field_of_study"`
+		Description  string `json:"description"`
+	}
+
+	UserExperience struct {
+		ID          string `json:"id"`
+		Title       string `json:"title"`
+		CompanyID   string `json:"company_id"`
+		CompanyName string `json:"company_name"`
+		Location    string `json:"location"`
+		StartDate   string `json:"started_at"`
+		EndDate     string `json:"ended_at"`
+		Description string `json:"description"`
+	}
+
+	UserSkill struct {
+		ID      string `json:"id"`
+		SkillID string `json:"skill_id"`
+		Name    string `json:"name"`
+	}
+
 	UserRegisterRequest struct {
 		Name           string                `json:"name" form:"name" validate:"required"`
 		Password       string                `json:"password" form:"password" validate:"required"`

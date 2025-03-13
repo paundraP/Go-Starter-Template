@@ -1,6 +1,7 @@
 package user
 
 import (
+	"Go-Starter-Template/domain"
 	"Go-Starter-Template/entities"
 	"context"
 
@@ -15,6 +16,7 @@ type (
 		GetUserByEmail(ctx context.Context, email string) (entities.User, error)
 		CheckUserByID(ctx context.Context, id string) bool
 		UpdateSubscriptionStatus(ctx context.Context, userID string) error
+		GetProfile(ctx context.Context, id uuid.UUID) (domain.UserProfile, error)
 		UpdateProfile(ctx context.Context, user entities.User) error
 		PostEducation(ctx context.Context, req entities.UserEducation) error
 		UpdateEducation(ctx context.Context, req entities.UserEducation) error
@@ -78,6 +80,77 @@ func (r *userRepository) UpdateSubscriptionStatus(ctx context.Context, userID st
 		return err
 	}
 	return nil
+}
+
+func (r *userRepository) GetProfile(ctx context.Context, id uuid.UUID) (domain.UserProfile, error) {
+	var user entities.User
+	var education []entities.UserEducation
+	var experience []entities.UserExperience
+	var skill []entities.UserSkill
+
+	if err := r.db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
+		return domain.UserProfile{}, err
+	}
+
+	if err := r.db.WithContext(ctx).Find(&education, "user_id = ?", id).Error; err != nil {
+		return domain.UserProfile{}, err
+	}
+
+	if err := r.db.WithContext(ctx).Preload("Company").Find(&experience, "user_id = ?", id).Error; err != nil {
+		return domain.UserProfile{}, err
+	}
+
+	if err := r.db.WithContext(ctx).Preload("Skill").Find(&skill, "user_id = ?", id).Error; err != nil {
+		return domain.UserProfile{}, err
+	}
+
+	formattedEducations := make([]domain.UserEducation, len(education))
+	for i, edu := range education {
+		formattedEducations[i] = domain.UserEducation{
+			ID:           edu.ID.String(),
+			SchoolName:   edu.SchoolName,
+			Degree:       edu.Degree,
+			FieldOfStudy: edu.FieldOfStudy,
+			Description:  edu.Description,
+		}
+	}
+
+	formattedExperiences := make([]domain.UserExperience, len(experience))
+	for i, exp := range experience {
+		formattedExperiences[i] = domain.UserExperience{
+			ID:          exp.ID.String(),
+			Title:       exp.Title,
+			CompanyID:   exp.CompanyID.String(),
+			CompanyName: exp.Company.Name,
+			Location:    exp.Location,
+			StartDate:   exp.StartedAt.String(),
+			EndDate:     exp.EndedAt.String(),
+			Description: exp.Description,
+		}
+	}
+
+	formattedSkills := make([]domain.UserSkill, len(skill))
+	for i, sk := range skill {
+		formattedSkills[i] = domain.UserSkill{
+			ID:      sk.ID.String(),
+			SkillID: sk.SkillID.String(),
+			Name:    sk.Skill.Name,
+		}
+	}
+
+	return domain.UserProfile{
+		PersonalInfo: domain.UserPersonalInfo{
+			Name:           user.Name,
+			About:          user.About,
+			Address:        user.Address,
+			CurrentTitle:   user.CurrentTitle,
+			ProfilePicture: user.ProfilePicture,
+			Headline:       user.Headline,
+		},
+		Educations:  formattedEducations,
+		Experiences: formattedExperiences,
+		Skills:      formattedSkills,
+	}, nil
 }
 
 func (r *userRepository) UpdateProfile(ctx context.Context, user entities.User) error {

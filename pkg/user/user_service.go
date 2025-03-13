@@ -17,6 +17,7 @@ type (
 	UserService interface {
 		RegisterUser(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error)
 		Login(ctx context.Context, req domain.UserLoginRequest) (domain.UserLoginResponse, error)
+		GetProfile(ctx context.Context, userID string) (domain.UserProfile, error)
 		UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error
 		PostEducation(ctx context.Context, req domain.PostUserEducationRequest, userID string) error
 		DeleteEducation(ctx context.Context, educationID string) error
@@ -118,6 +119,27 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 		Token: token,
 		Role:  user.Role,
 	}, nil
+}
+
+func (s *userService) GetProfile(ctx context.Context, userID string) (domain.UserProfile, error) {
+	// if exist := s.userRepository.CheckUserByID(ctx, userID
+	// ); !exist {
+	// 	return domain.UserRegisterResponse{}, domain.ErrUserNotFound
+
+	id, err := uuid.Parse(userID)
+
+	if err != nil {
+		return domain.UserProfile{}, domain.ErrParseUUID
+	}
+
+	res, err := s.userRepository.GetProfile(ctx, id)
+
+	if err != nil {
+		return domain.UserProfile{}, domain.ErrGetProfile
+	}
+
+	return res, nil
+
 }
 
 func (s *userService) UpdateProfile(ctx context.Context, req domain.UpdateUserRequest) error {
