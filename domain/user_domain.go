@@ -143,6 +143,8 @@ type (
 		Degree       string `json:"degree" form:"degree"`
 		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
 		Description  string `json:"description" form:"description"`
+		StartDate    string `json:"start_date" form:"start_date" validate:"required"`
+		EndDate      string `json:"end_date" form:"end_date"`
 	}
 
 	UpdateUserEducationRequest struct {
@@ -151,6 +153,8 @@ type (
 		Degree       string `json:"degree" form:"degree"`
 		FieldOfStudy string `json:"field_of_study" form:"field_of_study"`
 		Description  string `json:"description" form:"description"`
+		StartDate    string `json:"start_date" form:"start_date" validate:"required"`
+		EndDate      string `json:"end_date" form:"end_date"`
 	}
 
 	PostUserExperienceRequest struct {

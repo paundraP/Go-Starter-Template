@@ -197,6 +197,20 @@ func (s *userService) PostEducation(ctx context.Context, req domain.PostUserEduc
 		Degree:       req.Degree,
 		FieldOfStudy: req.FieldOfStudy,
 		Description:  req.Description,
+		StartedAt: func() time.Time {
+			startedAt, err := time.Parse("2006-01-02", req.StartDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return startedAt
+		}(),
+		EndedAt: func() time.Time {
+			endedAt, err := time.Parse("2006-01-02", req.EndDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return endedAt
+		}(),
 	}
 
 	if err := s.userRepository.PostEducation(ctx, education); err != nil {
@@ -225,6 +239,20 @@ func (s *userService) UpdateEducation(ctx context.Context, req domain.UpdateUser
 		Degree:       req.Degree,
 		FieldOfStudy: req.FieldOfStudy,
 		Description:  req.Description,
+		StartedAt: func() time.Time {
+			startedAt, err := time.Parse("2006-01-02", req.StartDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return startedAt
+		}(),
+		EndedAt: func() time.Time {
+			endedAt, err := time.Parse("2006-01-02", req.EndDate)
+			if err != nil {
+				return time.Time{}
+			}
+			return endedAt
+		}(),
 	}
 
 	if err := s.userRepository.UpdateEducation(ctx, userEducation); err != nil {
