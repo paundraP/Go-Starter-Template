@@ -7,6 +7,7 @@ import (
 type User struct {
 	ID             uuid.UUID `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
 	Name           string    `json:"name"`
+	Slug           string    `json:"slug"`
 	Password       string    `json:"password"`
 	Email          string    `json:"email"`
 	About          string    `json:"about"`
