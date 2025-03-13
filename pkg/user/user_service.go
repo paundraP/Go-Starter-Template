@@ -125,11 +125,11 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 	}, nil
 }
 
-func (s *userService) GetProfile(ctx context.Context, slug string) (domain.UserProfile, error) {
+func (s *userService) GetProfile(ctx context.Context, slug string) (domain.UserProfileResponse, error) {
 	res, err := s.userRepository.GetProfile(ctx, slug)
 
 	if err != nil {
-		return domain.UserProfile{}, domain.ErrGetProfile
+		return domain.UserProfileResponse{}, domain.ErrGetProfile
 	}
 
 	return res, nil
