@@ -2,7 +2,7 @@
 
 [![Mentioned in Awesome Fiber](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/gofiber/awesome-fiber)
 
-This is a REST API built with Golang and the Fiber framework. This repository also includes a payment gateway and storage management if your service requires one.
+This is a REST API built with Golang and the Fiber framework. This repository also includes payment gateway and storage management if your service requires one.
 
 ## API Spec
 
