@@ -35,12 +35,6 @@ Clean Architecture is a software design philosophy that emphasizes the separatio
 - [Docker](https://www.docker.com/)
 - [Go 1.20 or higher](https://go.dev/dl/)
 
-`add on: In this project I use Qodana, Static code analysis by Qodana helps development teams to follow agreed quality standards and deliver readable, maintainable and secure code by JetBrains. If you want to test it on your code, just install Qodana and run it with:`
-
-```shell
-qodana scan
-```
-
 ## Setup
 
 1. Clone this repository:
@@ -87,6 +81,5 @@ The API should now be running on http://127.0.0.1:3000.
 
 - [Go-Fiber](https://github.com/gofiber/recipes/tree/master/clean-architecture)
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Qodana](https://www.jetbrains.com/qodana/)
 - [Midtrans](https://github.com/Midtrans/midtrans-go)
 - [JWT](https://github.com/golang-jwt/jwt)
