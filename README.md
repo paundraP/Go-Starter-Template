@@ -2,7 +2,7 @@
 
 [![Mentioned in Awesome Fiber](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/gofiber/awesome-fiber)
 
-This is a REST API built with Golang and the Fiber framework. This repository also includes a payment gateway if your service requires one.
+This is a REST API built with Golang and the Fiber framework. This repository also includes a payment gateway and storage management if your service requires one.
 
 ## API Spec
 
@@ -87,3 +87,4 @@ The API should now be running on http://127.0.0.1:3000.
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Midtrans](https://github.com/Midtrans/midtrans-go)
 - [JWT](https://github.com/golang-jwt/jwt)
+- [S3 Bucket](https://github.com/aws/aws-sdk-go)
