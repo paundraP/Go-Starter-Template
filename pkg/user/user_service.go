@@ -141,7 +141,7 @@ func (s *userService) makeVerificationEmail(email string) (map[string]string, er
 	}
 
 	draftEmail := map[string]string{
-		"subject": "Lingua - Verification Email",
+		"subject": "Verification Email",
 		"body":    strMail.String(),
 	}
 
