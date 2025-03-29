@@ -11,6 +11,114 @@
     }
   ],
   "paths": {
+    "/api/v1/users/register": {
+      "post": {
+        "summary": "Register User",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Paundra Pujo Darmawan"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "pujo"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "paundrapujodarmawan@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "pujoganteng123"
+                  },
+                  "contact": {
+                    "type": "string",
+                    "example": "081234567890"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "register success",
+                  "data": {
+                    "email": "ojupmawan@gmail.com",
+                    "username": "pujo"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already exists",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "message": "register failed",
+                  "error": "email already exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "summary": "Login User",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "ojupmawan@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "pujoganteng123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "login success",
+                  "data": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTBmYzk3NjktZWI1Ni00YjY4LWJhNGQtNzQwNmM3MGJkYzM1Iiwicm9sZSI6InVzZXIiLCJpc3MiOiJGUCBTV0UgS0VMT01QT0sgMyIsImV4cCI6MTc0MzI5NTA3NiwiaWF0IjoxNzQzMjg3ODc2fQ.xvJTZT-eV6jGBaoyc_FpPTq0xgpISqDI7KKaezvTJKw",
+                    "role": "user"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/me": {
       "get": {
         "summary": "Get User Profile",
@@ -87,7 +195,7 @@
     },
     "/api/v1/users/subscribe": {
       "post": {
-        "summary": "Subscribe User",
+        "summary": "Subscribe",
         "operationId": "subscribeUser",
         "requestBody": {
           "content": {
@@ -119,114 +227,6 @@
                   "data": {
                     "invoice": "https://app.sandbox.midtrans.com/snap/v4/redirection/df2cdc02-67e5-4b23-b021-3c4878d10aef"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/login": {
-      "post": {
-        "summary": "Login User",
-        "operationId": "loginUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "ojupmawan@gmail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "pujoganteng123"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "login success",
-                  "data": {
-                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTBmYzk3NjktZWI1Ni00YjY4LWJhNGQtNzQwNmM3MGJkYzM1Iiwicm9sZSI6InVzZXIiLCJpc3MiOiJGUCBTV0UgS0VMT01QT0sgMyIsImV4cCI6MTc0MzI5NTA3NiwiaWF0IjoxNzQzMjg3ODc2fQ.xvJTZT-eV6jGBaoyc_FpPTq0xgpISqDI7KKaezvTJKw",
-                    "role": "user"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/register": {
-      "post": {
-        "summary": "Register User",
-        "operationId": "registerUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "Paundra Pujo Darmawan"
-                  },
-                  "username": {
-                    "type": "string",
-                    "example": "pujo"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "ojupmawan@gmail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "pujoganteng123"
-                  },
-                  "contact": {
-                    "type": "string",
-                    "example": "081234567890"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "User successfully registered",
-            "content": {
-              "application/json": {
-                "example": {
-                  "success": true,
-                  "message": "register success",
-                  "data": {
-                    "email": "ojupmawan@gmail.com",
-                    "username": "pujo"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Email already exists",
-            "content": {
-              "application/json": {
-                "example": {
-                  "success": false,
-                  "message": "register failed",
-                  "error": "email already exists"
                 }
               }
             }
