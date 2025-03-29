@@ -1,0 +1,304 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Go-Starter-Template",
+    "description": "This is the API Documentation for the Golang Starter Template use Fiber.",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/me": {
+      "get": {
+        "summary": "Get User Profile",
+        "operationId": "getUserProfile",
+        "responses": {
+          "200": {
+            "description": "Success get profile",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "success get detail",
+                  "data": {
+                    "name": "Paundra Pujo Darmawan",
+                    "username": "pujo",
+                    "email": "ojupmawan@gmail.com",
+                    "contact": "081234567890",
+                    "subscription": false,
+                    "active_point": 0,
+                    "level_point": 0,
+                    "rank": "Bronze"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/update": {
+      "patch": {
+        "summary": "Update User Profile",
+        "operationId": "updateUserProfile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "paundra"
+                  },
+                  "profile_picture": {
+                    "type": "string",
+                    "format": "path/to/file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update user",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "update user success",
+                  "data": {
+                    "name": "Paundra Pujo Darmawan",
+                    "username": "paundra",
+                    "email": "ojupmawan@gmail.com",
+                    "contact": "081234567890",
+                    "profile_picture": "https://pujobucket.s3.ap-southeast-1.amazonaws.com/profile-picture/ProfilePicture-a0fc9769-eb56-4b68-ba4d-7406c70bdc35"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/subscribe": {
+      "post": {
+        "summary": "Subscribe User",
+        "operationId": "subscribeUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 399000
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "ojupmawan@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction processed successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Transaction processed successfully",
+                  "data": {
+                    "invoice": "https://app.sandbox.midtrans.com/snap/v4/redirection/df2cdc02-67e5-4b23-b021-3c4878d10aef"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "summary": "Login User",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "ojupmawan@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "pujoganteng123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "login success",
+                  "data": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTBmYzk3NjktZWI1Ni00YjY4LWJhNGQtNzQwNmM3MGJkYzM1Iiwicm9sZSI6InVzZXIiLCJpc3MiOiJGUCBTV0UgS0VMT01QT0sgMyIsImV4cCI6MTc0MzI5NTA3NiwiaWF0IjoxNzQzMjg3ODc2fQ.xvJTZT-eV6jGBaoyc_FpPTq0xgpISqDI7KKaezvTJKw",
+                    "role": "user"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "summary": "Register User",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Paundra Pujo Darmawan"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "pujo"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "ojupmawan@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "pujoganteng123"
+                  },
+                  "contact": {
+                    "type": "string",
+                    "example": "081234567890"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "register success",
+                  "data": {
+                    "email": "ojupmawan@gmail.com",
+                    "username": "pujo"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already exists",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "message": "register failed",
+                  "error": "email already exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/send_verify": {
+      "post": {
+        "summary": "Re-send Verification Email",
+        "operationId": "resendVerificationEmail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "ojupmawan@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "send verify email success"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ping": {
+      "get": {
+        "summary": "Ping API",
+        "operationId": "pingApi",
+        "responses": {
+          "200": {
+            "description": "API is running",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "pong, its works. test"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
