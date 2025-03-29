@@ -5,6 +5,7 @@ import (
 	"Go-Starter-Template/internal/api/routes"
 	"Go-Starter-Template/internal/middleware"
 	"Go-Starter-Template/internal/utils"
+	"Go-Starter-Template/internal/utils/storage"
 	"Go-Starter-Template/pkg/jwt"
 	"Go-Starter-Template/pkg/midtrans"
 	"Go-Starter-Template/pkg/user"
@@ -54,13 +55,16 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		Expiration: 1 * time.Second,
 	}))
 
+	// utils
+	s3 := storage.NewAwsS3()
+
 	// Repository
 	userRepository := user.NewUserRepository(db)
 	midtransRepository := midtrans.NewMidtransRepository(db)
 
 	// Service
 	jwtService := jwt.NewJWTService()
-	userService := user.NewUserService(userRepository, jwtService)
+	userService := user.NewUserService(userRepository, jwtService, s3)
 	midtransService := midtrans.NewMidtransService(
 		midtransRepository,
 		userRepository,

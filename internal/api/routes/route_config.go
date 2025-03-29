@@ -30,6 +30,7 @@ func (c *Config) User() {
 		user.Post("/login", c.UserHandler.Login)
 		user.Post("/send_verify", c.UserHandler.SendVerificationEmail)
 		user.Get("/verify", c.UserHandler.VerifyEmail)
+		user.Get("/me", c.Middleware.AuthMiddleware(c.JWTService), c.UserHandler.Me)
 		user.Patch("/update", c.Middleware.AuthMiddleware(c.JWTService), c.UserHandler.UpdateUser)
 		user.Post("/subscribe", c.Middleware.AuthMiddleware(c.JWTService), c.MidtransHandler.CreateTransaction)
 	}

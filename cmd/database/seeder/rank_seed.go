@@ -9,7 +9,7 @@ import (
 )
 
 func SeedingRank(db *gorm.DB) error {
-	file, err := os.Open("database/seeder/data/rank.json")
+	file, err := os.Open("cmd/database/seeder/data/rank.json")
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 		return err

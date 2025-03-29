@@ -117,6 +117,9 @@ func (h *userHandler) UpdateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
 	}
+
+	req.ProfilePicture, _ = c.FormFile("profile_picture")
+
 	if err := h.Validator.Struct(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedBodyRequest, err)
 	}

@@ -19,14 +19,8 @@ import (
 
 type (
 	MidtransService interface {
-		CreateTransaction(
-			req domain.MidtransPaymentRequest,
-			userID string,
-		) (domain.MidtransInvoiceUrl, error)
-		MidtransWebHook(
-			ctx context.Context,
-			req domain.MidtransWebhookRequest,
-		) (domain.MidtransWebhookResponse, error)
+		CreateTransaction(ctx context.Context, req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error)
+		MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error)
 	}
 
 	midtransService struct {
@@ -35,19 +29,19 @@ type (
 	}
 )
 
-func NewMidtransService(
-	midtransRepo MidtransRepository,
-	userRepository user.UserRepository,
-) MidtransService {
+func NewMidtransService(midtransRepo MidtransRepository, userRepository user.UserRepository) MidtransService {
 	return &midtransService{
 		midtransRepository: midtransRepo,
 		userRepository:     userRepository,
 	}
 }
 
-func validateSignature(
-	orderID, statusCode, grossAmount, receivedSignature string,
-) bool {
+const (
+	letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	numbers = "0123456789"
+)
+
+func validateSignature(orderID, statusCode, grossAmount, receivedSignature string) bool {
 	serverKey := os.Getenv("SERVER_KEY")
 	rawString := orderID + statusCode + grossAmount + serverKey
 
@@ -57,10 +51,19 @@ func validateSignature(
 	return expectedSignature == receivedSignature
 }
 
-func (s *midtransService) CreateTransaction(
-	req domain.MidtransPaymentRequest,
-	userID string,
-) (domain.MidtransInvoiceUrl, error) {
+func (s *midtransService) CreateTransaction(ctx context.Context, req domain.MidtransPaymentRequest, userID string) (domain.MidtransInvoiceUrl, error) {
+	email, err := s.userRepository.GetEmail(ctx, req.Email)
+	if err != nil {
+		return domain.MidtransInvoiceUrl{}, domain.ErrEmailNotFound
+	}
+	user, err := s.userRepository.GetUserByID(ctx, userID)
+	if err != nil {
+		return domain.MidtransInvoiceUrl{}, domain.ErrUserNotFound
+	}
+	if email.Email != user.Email {
+		return domain.MidtransInvoiceUrl{}, domain.ErrUserNotAllowed
+	}
+
 	client := payment.NewMidtransClient()
 	orderID := GenerateRandomString()
 	request := &snap.Request{
@@ -69,13 +72,12 @@ func (s *midtransService) CreateTransaction(
 			GrossAmt: req.Amount,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: req.Name,
+			FName: user.Name,
 			Email: req.Email,
 		},
 	}
-
-	snapResp, er := client.CreateTransaction(request)
-	if er != nil {
+	snapResp, err := client.CreateTransaction(request)
+	if err != nil {
 		return domain.MidtransInvoiceUrl{}, domain.ErrCreateTransactionFailed
 	}
 
@@ -101,16 +103,8 @@ func (s *midtransService) CreateTransaction(
 	}, nil
 }
 
-func (s *midtransService) MidtransWebHook(
-	ctx context.Context,
-	req domain.MidtransWebhookRequest,
-) (domain.MidtransWebhookResponse, error) {
-	if !validateSignature(
-		req.OrderID,
-		req.StatusCode,
-		req.GrossAmount,
-		req.SignatureKey,
-	) {
+func (s *midtransService) MidtransWebHook(ctx context.Context, req domain.MidtransWebhookRequest) (domain.MidtransWebhookResponse, error) {
+	if !validateSignature(req.OrderID, req.StatusCode, req.GrossAmount, req.SignatureKey) {
 		return domain.MidtransWebhookResponse{}, domain.ErrInvalidSignature
 	}
 
@@ -154,11 +148,6 @@ func (s *midtransService) MidtransWebHook(
 		OrderID:           transaction.Invoice,
 	}, nil
 }
-
-const (
-	letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	numbers = "0123456789"
-)
 
 func GenerateRandomString() string {
 	result := make([]byte, 8)

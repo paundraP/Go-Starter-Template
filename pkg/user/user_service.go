@@ -5,6 +5,7 @@ import (
 	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
 	emailservice "Go-Starter-Template/internal/utils/mailing"
+	"Go-Starter-Template/internal/utils/storage"
 	"Go-Starter-Template/pkg/jwt"
 	"bytes"
 	"context"
@@ -28,17 +29,19 @@ type (
 	userService struct {
 		userRepository UserRepository
 		jwtService     jwt.JWTService
+		S3             storage.AwsS3
 	}
 )
 
-func NewUserService(userRepository UserRepository, jwtService jwt.JWTService) UserService {
+func NewUserService(userRepository UserRepository, jwtService jwt.JWTService, s3 storage.AwsS3) UserService {
 	return &userService{
 		userRepository: userRepository,
 		jwtService:     jwtService,
+		S3:             s3,
 	}
 }
 
-var VerifyEmailRoute = "api/verify_email/user"
+var VerifyEmailRoute = "api/v1/users/verify"
 
 func (s *userService) Register(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error) {
 	// checking user if exist
@@ -110,6 +113,8 @@ func (s *userService) makeVerificationEmail(email string) (map[string]string, er
 	if err != nil {
 		return nil, err
 	}
+	// for this, better you use your frontend url that will fetch this link.
+	// THIS IS ONLY EXAMPLE! DONT DO THIS IN PRODUCTION
 	appUrl := os.Getenv("APP_URL")
 	verifyLink := appUrl + "/" + VerifyEmailRoute + "?token=" + token
 
@@ -226,14 +231,15 @@ func (s *userService) Me(ctx context.Context, userID string) (domain.DetailUserR
 	}
 
 	return domain.DetailUserResponse{
-		Name:         user.Name,
-		Username:     user.Username,
-		Email:        user.Email,
-		Contact:      user.Contact,
-		Subscription: user.Subscribe,
-		ActivePoint:  user.ActivePoint,
-		LevelPoint:   user.LevelPoint,
-		Rank:         rank.Name,
+		Name:           user.Name,
+		Username:       user.Username,
+		Email:          user.Email,
+		Contact:        user.Contact,
+		ProfilePicture: user.ProfilePicture,
+		Subscription:   user.Subscribe,
+		ActivePoint:    user.ActivePoint,
+		LevelPoint:     user.LevelPoint,
+		Rank:           rank.Name,
 	}, nil
 }
 
@@ -243,29 +249,45 @@ func (s *userService) Update(ctx context.Context, req domain.UpdateUserRequest, 
 		return domain.UpdateUserResponse{}, domain.ErrUserNotFound
 	}
 
+	if user.ProfilePicture != "" {
+		updatedKey, err := s.S3.UpdateFile(s.S3.GetObjectKeyFromLink(user.ProfilePicture), req.ProfilePicture, storage.AllowImage...)
+		if err != nil {
+			return domain.UpdateUserResponse{}, err
+		}
+		user.ProfilePicture = s.S3.GetPublicLinkKey(updatedKey)
+	} else if user.ProfilePicture == "" {
+		objectKey, err := s.S3.UploadFile("ProfilePicture-"+user.ID.String(), req.ProfilePicture, "profile-picture", storage.AllowImage...)
+		if err != nil {
+			return domain.UpdateUserResponse{}, err
+		}
+		user.ProfilePicture = s.S3.GetPublicLinkKey(objectKey)
+	}
+
+	// validation if the user who's updating is the valid user
 	id, err := uuid.Parse(userID)
 	if err != nil {
 		return domain.UpdateUserResponse{}, domain.ErrParseUUID
 	}
-
 	if user.ID != id {
 		return domain.UpdateUserResponse{}, domain.ErrUserNotValid
 	}
-	updatedUser := entities.User{
-		ID:       id,
-		Name:     ifNotEmpty(req.Name, user.Name),
-		Username: ifNotEmpty(req.Username, user.Username),
-		Email:    ifNotEmpty(req.Email, user.Email),
-		Contact:  ifNotEmpty(req.Contact, user.Contact),
-	}
 
-	upd, err := s.userRepository.UpdateUser(ctx, updatedUser)
+	user.Name = ifNotEmpty(req.Name, user.Name)
+	user.Username = ifNotEmpty(req.Username, user.Username)
+	user.Email = ifNotEmpty(req.Email, user.Email)
+	user.Contact = ifNotEmpty(req.Contact, user.Contact)
+
+	upd, err := s.userRepository.UpdateUser(ctx, *user)
 	if err != nil {
 		return domain.UpdateUserResponse{}, err
 	}
 
 	return domain.UpdateUserResponse{
-		Email: upd.Email,
+		Name:           upd.Name,
+		Username:       upd.Username,
+		Email:          upd.Email,
+		Contact:        upd.Contact,
+		ProfilePicture: upd.ProfilePicture,
 	}, nil
 }
 

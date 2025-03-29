@@ -4,6 +4,7 @@ import (
 	"Go-Starter-Template/cmd/config"
 	migration "Go-Starter-Template/cmd/database/migrate"
 	"Go-Starter-Template/cmd/database/seeder"
+	"Go-Starter-Template/internal/utils"
 	"flag"
 	"fmt"
 	"log"
@@ -12,9 +13,10 @@ import (
 )
 
 func DatabaseSetUp() (*gorm.DB, error) {
+	utils.LoadEnv()
 	fmt.Println("Hi!")
 	// setting up database (migration and data)
-	db, err := config.databaseconf.ConnectDB()
+	db, err := config.ConnectDB()
 	if db == nil || err != nil {
 		return nil, err
 	}
@@ -38,9 +40,8 @@ func DatabaseSetUp() (*gorm.DB, error) {
 }
 
 func main() {
-	db, err := DatabaseSetUp()
+	_, err := DatabaseSetUp()
 	if err != nil {
 		log.Fatalf("Error setting up database : %v", err)
 	}
-	fmt.Println("Database setup successful:", db)
 }

@@ -37,7 +37,7 @@ func (h *midtransHandler) CreateTransaction(c *fiber.Ctx) error {
 	if err := h.Validator.Struct(req); err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedCreateTransaction, err)
 	}
-	res, err := h.midtransService.CreateTransaction(req, userID)
+	res, err := h.midtransService.CreateTransaction(c.Context(), req, userID)
 	if err != nil {
 		return presenters.ErrorResponse(c, fiber.StatusBadRequest, domain.MessageFailedCreateTransaction, err)
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 func SeedingUser(db *gorm.DB) error {
-	file, err := os.Open("database/seeder/data/user.json")
+	file, err := os.Open("cmd/database/seeder/data/user.json")
 	if err != nil {
 		log.Fatalf("Error opening seed data file: %v", err)
 		return err

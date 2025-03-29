@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"mime/multipart"
+)
 
 var (
 	MessageSuccessRegister             = "register success"
@@ -66,24 +69,30 @@ type (
 	}
 
 	DetailUserResponse struct {
-		Name         string `json:"name"`
-		Username     string `json:"username"`
-		Email        string `json:"email"`
-		Contact      string `json:"contact"`
-		Subscription bool   `json:"subscription"`
-		ActivePoint  int    `json:"active_point"`
-		LevelPoint   int    `json:"level_point"`
-		Rank         string `json:"rank"`
+		Name           string `json:"name"`
+		Username       string `json:"username"`
+		Email          string `json:"email"`
+		Contact        string `json:"contact"`
+		ProfilePicture string `json:"profile_picture"`
+		Subscription   bool   `json:"subscription"`
+		ActivePoint    int    `json:"active_point"`
+		LevelPoint     int    `json:"level_point"`
+		Rank           string `json:"rank"`
 	}
 
 	UpdateUserRequest struct {
-		Name     string `json:"name" validate:"omitempty"`
-		Username string `json:"username" validate:"omitempty,min=3"`
-		Email    string `json:"email" validate:"omitempty,email"`
-		Contact  string `json:"contact" validate:"omitempty"`
+		Name           string                `json:"name" validate:"omitempty"`
+		Username       string                `json:"username" validate:"omitempty,min=3"`
+		Email          string                `json:"email" validate:"omitempty,email"`
+		Contact        string                `json:"contact" validate:"omitempty"`
+		ProfilePicture *multipart.FileHeader `json:"profile_picture" validate:"omitempty"`
 	}
 
 	UpdateUserResponse struct {
-		Email string `json:"email"`
+		Name           string `json:"name"`
+		Username       string `json:"username"`
+		Email          string `json:"email"`
+		Contact        string `json:"contact"`
+		ProfilePicture string `json:"profile_picture"`
 	}
 )
