@@ -5,6 +5,7 @@ import (
 	emailservice "Go-Starter-Template/internal/utils/mailing"
 	"Go-Starter-Template/pkg/entities"
 	"Go-Starter-Template/pkg/entities/domain"
+	"Go-Starter-Template/pkg/jwt"
 	"bytes"
 	"context"
 	"github.com/google/uuid"
@@ -26,11 +27,15 @@ type (
 
 	userService struct {
 		userRepository UserRepository
+		jwtService     jwt.JWTService
 	}
 )
 
-func NewUserService(userRepository UserRepository) UserService {
-	return &userService{userRepository: userRepository}
+func NewUserService(userRepository UserRepository, jwtService jwt.JWTService) UserService {
+	return &userService{
+		userRepository: userRepository,
+		jwtService:     jwtService,
+	}
 }
 
 var VerifyEmailRoute = "api/verify_email/user"
@@ -90,10 +95,7 @@ func (s *userService) Login(ctx context.Context, req domain.UserLoginRequest) (d
 		return domain.UserLoginResponse{}, domain.CredentialInvalid
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Role)
-	if err != nil {
-		return domain.UserLoginResponse{}, err
-	}
+	token := s.jwtService.GenerateTokenUser(user.ID.String(), user.Role)
 
 	return domain.UserLoginResponse{
 		Token: token,

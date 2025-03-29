@@ -1,9 +1,9 @@
 package main
 
 import (
+	"Go-Starter-Template/cmd/config"
 	migration "Go-Starter-Template/cmd/database/migrate"
 	"Go-Starter-Template/cmd/database/seeder"
-	databaseconf "Go-Starter-Template/internal/config/databaseConf"
 	"flag"
 	"fmt"
 	"log"
@@ -14,7 +14,7 @@ import (
 func DatabaseSetUp() (*gorm.DB, error) {
 	fmt.Println("Hi!")
 	// setting up database (migration and data)
-	db, err := databaseconf.ConnectDB()
+	db, err := config.databaseconf.ConnectDB()
 	if db == nil || err != nil {
 		return nil, err
 	}

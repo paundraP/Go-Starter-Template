@@ -1,7 +1,6 @@
 package midtrans
 
 import (
-	paymentconf "Go-Starter-Template/internal/config/paymentConf"
 	"Go-Starter-Template/internal/utils/payment"
 	"Go-Starter-Template/pkg/entities"
 	"Go-Starter-Template/pkg/entities/domain"
@@ -127,13 +126,13 @@ func (s *midtransService) MidtransWebHook(
 	case "capture":
 		if fraudStatus == "accept" {
 			transaction.Status = "paid"
-			paymentconf.LogTransaction(transaction)
+			payment.LogTransaction(transaction)
 		} else {
 			transaction.Status = "fraud"
 		}
 	case "settlement":
 		transaction.Status = "paid"
-		paymentconf.LogTransaction(transaction)
+		payment.LogTransaction(transaction)
 	case "deny", "cancel", "expire":
 		transaction.Status = "failed"
 	case "pending":

@@ -5,6 +5,7 @@ import (
 	"Go-Starter-Template/internal/api/routes"
 	"Go-Starter-Template/internal/middleware"
 	"Go-Starter-Template/internal/utils"
+	"Go-Starter-Template/pkg/jwt"
 	"Go-Starter-Template/pkg/midtrans"
 	"Go-Starter-Template/pkg/user"
 	"fmt"
@@ -21,7 +22,9 @@ import (
 
 func NewApp(db *gorm.DB) (*fiber.App, error) {
 	utils.InitValidator()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		EnablePrintRoutes: true,
+	})
 	middlewares := middleware.NewMiddleware()
 	validator := utils.Validate
 
@@ -56,7 +59,8 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	midtransRepository := midtrans.NewMidtransRepository(db)
 
 	// Service
-	userService := user.NewUserService(userRepository)
+	jwtService := jwt.NewJWTService()
+	userService := user.NewUserService(userRepository, jwtService)
 	midtransService := midtrans.NewMidtransService(
 		midtransRepository,
 		userRepository,
@@ -72,6 +76,7 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		UserHandler:     userHandler,
 		MidtransHandler: midtransHandler,
 		Middleware:      middlewares,
+		JWTService:      jwtService,
 	}
 	routesConfig.Setup()
 	return app, nil

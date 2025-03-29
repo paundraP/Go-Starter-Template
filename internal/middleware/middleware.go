@@ -1,10 +1,13 @@
 package middleware
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"Go-Starter-Template/pkg/jwt"
+	"github.com/gofiber/fiber/v2"
+)
 
 type (
 	Middleware interface {
-		AuthMiddleware() fiber.Handler
+		AuthMiddleware(jwtService jwt.JWTService) fiber.Handler
 		CORSMiddleware() fiber.Handler
 		OnlyAllow(allow string) fiber.Handler
 	}
