@@ -87,4 +87,4 @@ The API should now be running on http://127.0.0.1:3000.
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Midtrans](https://github.com/Midtrans/midtrans-go)
 - [JWT](https://github.com/golang-jwt/jwt)
-- [S3 Bucket](https://github.com/aws/aws-sdk-go)
+- [S3 Bucket](https://github.com/aws/aws-sdk-go-v2)
