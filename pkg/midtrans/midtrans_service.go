@@ -1,9 +1,9 @@
 package midtrans
 
 import (
+	"Go-Starter-Template/domain"
+	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils/payment"
-	"Go-Starter-Template/pkg/entities"
-	"Go-Starter-Template/pkg/entities/domain"
 	"Go-Starter-Template/pkg/user"
 	"context"
 	"crypto/rand"

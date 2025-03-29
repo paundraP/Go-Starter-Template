@@ -1,10 +1,10 @@
 package user
 
 import (
+	"Go-Starter-Template/domain"
+	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
 	emailservice "Go-Starter-Template/internal/utils/mailing"
-	"Go-Starter-Template/pkg/entities"
-	"Go-Starter-Template/pkg/entities/domain"
 	"Go-Starter-Template/pkg/jwt"
 	"bytes"
 	"context"

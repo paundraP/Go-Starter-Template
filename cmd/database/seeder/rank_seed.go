@@ -1,7 +1,7 @@
 package seeder
 
 import (
-	"Go-Starter-Template/pkg/entities"
+	"Go-Starter-Template/entities"
 	"encoding/json"
 	"gorm.io/gorm"
 	"log"

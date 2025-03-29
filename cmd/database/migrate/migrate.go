@@ -1,7 +1,7 @@
 package migration
 
 import (
-	"Go-Starter-Template/pkg/entities"
+	entities2 "Go-Starter-Template/entities"
 	"fmt"
 	"log"
 
@@ -10,15 +10,15 @@ import (
 
 func Migrate(db *gorm.DB) error {
 	db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";")
-	if err := db.AutoMigrate(&entities.User{}); err != nil {
+	if err := db.AutoMigrate(&entities2.User{}); err != nil {
 		log.Fatalf("Error migrating user database: %v", err)
 		return err
 	}
-	if err := db.AutoMigrate(&entities.Rank{}); err != nil {
+	if err := db.AutoMigrate(&entities2.Rank{}); err != nil {
 		log.Fatalf("Error migrating user database: %v", err)
 		return err
 	}
-	if err := db.AutoMigrate(&entities.Transaction{}); err != nil {
+	if err := db.AutoMigrate(&entities2.Transaction{}); err != nil {
 		log.Fatalf("Error migrating user database: %v", err)
 		return err
 	}

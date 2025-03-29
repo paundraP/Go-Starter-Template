@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	"Go-Starter-Template/domain"
 	"Go-Starter-Template/internal/api/presenters"
-	"Go-Starter-Template/pkg/entities/domain"
 	jwtService "Go-Starter-Template/pkg/jwt"
 	"github.com/gofiber/fiber/v2"
 	"strings"

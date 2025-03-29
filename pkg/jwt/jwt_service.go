@@ -1,8 +1,8 @@
 package jwt
 
 import (
+	"Go-Starter-Template/domain"
 	"Go-Starter-Template/internal/utils"
-	"Go-Starter-Template/pkg/entities/domain"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
