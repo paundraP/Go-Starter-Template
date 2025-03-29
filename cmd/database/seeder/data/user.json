@@ -18,16 +18,5 @@
     "role": "user",
     "active_point": 0,
     "level_point": 0
-  },
-  {
-    "id": "cd594635-a2cf-4306-9349-9c7201b9bd25",
-    "name": "Firda Silviani",
-    "username": "Firsil",
-    "email": "firsil@gmail.com",
-    "password": "mostSecurePass123",
-    "contact": "081234567890",
-    "role": "mentor",
-    "active_point": 0,
-    "level_point": 0
   }
 ]

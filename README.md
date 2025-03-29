@@ -4,6 +4,10 @@
 
 This is a REST API built with Golang and the Fiber framework. This repository also includes a payment gateway if your service requires one.
 
+## API Spec
+
+All api-spec is in the `api/` directory
+
 ## Clean Architecture Principles
 
 Clean Architecture is a software design philosophy that emphasizes the separation of concerns, making the codebase more maintainable, testable, and scalable. In this example, the Go Fiber application follows Clean Architecture principles by organizing the code into distinct layers, each with its own responsibility.
