@@ -37,7 +37,7 @@ func (c *Config) User() {
 
 func (c *Config) GuestRoute() {
 	c.App.Get("/api/ping", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "pong, its works. please"})
+		return c.JSON(fiber.Map{"message": "pong, its works. test"})
 	})
 	c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
 }
