@@ -81,6 +81,21 @@ Clean Architecture is a software design philosophy that emphasizes the separatio
 
 The API should now be running on http://127.0.0.1:3000.
 
+## Contributing
+
+Im excited to have you contribute to this project! If you’d like to help out, feel free to fork the repository, make changes, and submit a pull request. Here's how:
+
+- Fork the repository to create your own copy.
+- Clone your fork to your local machine.
+- Create a new branch for your changes.
+- Make your edits, fix issues, or add new features.
+- Test your changes to make sure everything works.
+- Commit your changes and push them to your fork.
+- Open a pull request with a detailed description of your changes.
+
+Im always happy to collaborate, so don’t hesitate to reach out if you have any questions!
+
+
 ### Reference:
 
 - [Go-Fiber](https://github.com/gofiber/recipes/tree/master/clean-architecture)
