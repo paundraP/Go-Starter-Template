@@ -34,11 +34,6 @@ func WithFilters(db *gorm.DB, m *pagination.Meta, opts ...Option) *gorm.DB {
 		opt(&metaService)
 	}
 
-	// Optional: Print out filters and sorters for debugging
-	for i, v := range metaService.Filter {
-		fmt.Println(i + " " + v)
-	}
-
 	return metaService.buildFilter(db, m)
 }
 

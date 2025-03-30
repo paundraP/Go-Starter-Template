@@ -8,6 +8,7 @@ import (
 	"Go-Starter-Template/internal/utils/storage"
 	"Go-Starter-Template/pkg/jwt"
 	"Go-Starter-Template/pkg/midtrans"
+	"Go-Starter-Template/pkg/rank"
 	"Go-Starter-Template/pkg/user"
 	"fmt"
 	"os"
@@ -61,10 +62,12 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	// Repository
 	userRepository := user.NewUserRepository(db)
 	midtransRepository := midtrans.NewMidtransRepository(db)
+	rankRepository := rank.NewRankRepository(db)
 
 	// Service
 	jwtService := jwt.NewJWTService()
 	userService := user.NewUserService(userRepository, jwtService, s3)
+	rankService := rank.NewRankService(rankRepository, userRepository)
 	midtransService := midtrans.NewMidtransService(
 		midtransRepository,
 		userRepository,
@@ -73,12 +76,14 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	// Handler
 	userHandler := handlers.NewUserHandler(userService, validator)
 	midtransHandler := handlers.NewMidtransHandler(midtransService, validator)
+	rankHandler := handlers.NewRankHandler(rankService, validator)
 
 	// routes
 	routesConfig := routes.Config{
 		App:             app,
 		UserHandler:     userHandler,
 		MidtransHandler: midtransHandler,
+		RankHandler:     rankHandler,
 		Middleware:      middlewares,
 		JWTService:      jwtService,
 	}

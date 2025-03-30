@@ -11,6 +11,7 @@ type Config struct {
 	App             *fiber.App
 	UserHandler     handlers.UserHandler
 	MidtransHandler handlers.MidtransHandler
+	RankHandler     handlers.RankHandler
 	Middleware      middleware.Middleware
 	JWTService      jwt.JWTService
 }
@@ -41,6 +42,7 @@ func (c *Config) GuestRoute() {
 		return c.JSON(fiber.Map{"message": "pong, its works. test"})
 	})
 	c.App.Post("/webhook/midtrans", c.MidtransHandler.MidtransWebhookHandler)
+	c.App.Get("/api/v1/leaderboard", c.RankHandler.Leaderboard)
 }
 
 func (c *Config) AuthRoute() {
