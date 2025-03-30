@@ -23,7 +23,7 @@ func (c *Config) Setup() {
 }
 
 func (c *Config) User() {
-	user := c.App.Group("/api/v1/users")
+	user := c.App.Group("/api-spec/v1/users")
 	// user routes
 	{
 		user.Post("/register", c.UserHandler.Register)

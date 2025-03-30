@@ -4,7 +4,7 @@ import (
 	"Go-Starter-Template/domain"
 	"Go-Starter-Template/entities"
 	"Go-Starter-Template/internal/utils"
-	emailservice "Go-Starter-Template/internal/utils/mailing"
+	"Go-Starter-Template/internal/utils/mailing"
 	"Go-Starter-Template/internal/utils/storage"
 	"Go-Starter-Template/pkg/jwt"
 	"bytes"
@@ -41,7 +41,7 @@ func NewUserService(userRepository UserRepository, jwtService jwt.JWTService, s3
 	}
 }
 
-var VerifyEmailRoute = "api/v1/users/verify"
+var VerifyEmailRoute = "api-spec/v1/users/verify"
 
 func (s *userService) Register(ctx context.Context, req domain.UserRegisterRequest) (domain.UserRegisterResponse, error) {
 	// checking user if exist
@@ -71,7 +71,7 @@ func (s *userService) Register(ctx context.Context, req domain.UserRegisterReque
 		return domain.UserRegisterResponse{}, err
 	}
 
-	if err := emailservice.SendMail(req.Email, draftEmail["subject"], draftEmail["body"]); err != nil {
+	if err := mailing.SendMail(req.Email, draftEmail["subject"], draftEmail["body"]); err != nil {
 		return domain.UserRegisterResponse{}, err
 	}
 
@@ -158,7 +158,7 @@ func (s *userService) SendVerificationEmail(ctx context.Context, req domain.Send
 	if err != nil {
 		return err
 	}
-	if err := emailservice.SendMail(user.Email, draftEmail["subject"], draftEmail["body"]); err != nil {
+	if err := mailing.SendMail(user.Email, draftEmail["subject"], draftEmail["body"]); err != nil {
 		return err
 	}
 	return nil
