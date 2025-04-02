@@ -11,15 +11,12 @@ import (
 	"Go-Starter-Template/pkg/rank"
 	"Go-Starter-Template/pkg/user"
 	"fmt"
-	"os"
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
+	"os"
 )
 
 func NewApp(db *gorm.DB) (*fiber.App, error) {
@@ -37,6 +34,10 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 	}
 
 	// setting up logging and limiter
+	err = os.MkdirAll("./logs", os.ModePerm)
+	if err != nil {
+		log.Fatalf("error creating logs directory: %v", err)
+	}
 	file, err := os.OpenFile(
 		"./logs/app.log",
 		os.O_RDWR|os.O_CREATE|os.O_APPEND,
@@ -51,10 +52,11 @@ func NewApp(db *gorm.DB) (*fiber.App, error) {
 		Output:     file,
 	}))
 
-	app.Use(limiter.New(limiter.Config{
-		Max:        10,
-		Expiration: 1 * time.Second,
-	}))
+	// Uncomment if you want to use limiter to your endpoint
+	//app.Use(limiter.New(limiter.Config{
+	//	Max:        10,
+	//	Expiration: 1 * time.Second,
+	//}))
 
 	// utils
 	s3 := storage.NewAwsS3()
